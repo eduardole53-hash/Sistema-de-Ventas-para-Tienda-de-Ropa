@@ -1,5 +1,8 @@
 # Sistema-de-Ventas-para-Tienda-de-Ropa
 Proyecto: Sistema de Ventas para Tienda de Ropa
 
-Prueba de sincronizacion #1
+Prueba de sincronizacion 
+#1
+#2
+
 
