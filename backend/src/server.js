@@ -15,16 +15,16 @@ const productsRoutes = require("./routes/products");
 const variantsRoutes = require("./routes/variants");
 const salesRoutes = require("./routes/sales");
 
-// RUTA SIMPLE PARA PROBAR
-app.get('/', (req, res) => {
-  res.send('API funcionando correctamente');
-});
-
 // USAR RUTAS
 app.use("/api/usuarios", usersRoutes);
 app.use("/api/productos", productsRoutes);
 app.use("/api/variantes", variantsRoutes);
 app.use("/api/ventas", salesRoutes);
+
+// RUTA SIMPLE PARA PROBAR
+app.get('/', (req, res) => {
+  res.send('API funcionando correctamente');
+});
 
 // LEVANTAR SERVIDOR
 const PORT = process.env.PORT || 4000;
