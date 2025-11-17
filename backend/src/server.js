@@ -9,12 +9,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Ruta simple para probar que el backend funciona
+// IMPORTAR RUTAS
+const usersRoutes = require("./routes/users");
+const productsRoutes = require("./routes/products");
+const variantsRoutes = require("./routes/variants");
+const salesRoutes = require("./routes/sales");
+
+// RUTA SIMPLE PARA PROBAR
 app.get('/', (req, res) => {
   res.send('API funcionando correctamente');
 });
 
-// Levantar el servidor
+// USAR RUTAS
+app.use("/api/usuarios", usersRoutes);
+app.use("/api/productos", productsRoutes);
+app.use("/api/variantes", variantsRoutes);
+app.use("/api/ventas", salesRoutes);
+
+// LEVANTAR SERVIDOR
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
