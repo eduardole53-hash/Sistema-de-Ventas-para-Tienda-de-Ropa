@@ -1,4 +1,3 @@
-// server.js
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -10,16 +9,16 @@ app.use(cors());
 app.use(express.json());
 
 // IMPORTAR RUTAS
-const usersRoutes = require("./routes/users");
+const userRoutes = require("./routes/user");
 const productsRoutes = require("./routes/products");
 const variantsRoutes = require("./routes/variants");
-const salesRoutes = require("./routes/sales");
+const saleRoutes = require("./routes/sale");
 
 // USAR RUTAS
-app.use("/api/usuarios", usersRoutes);
+app.use("/api/usuario", userRoutes);
 app.use("/api/productos", productsRoutes);
 app.use("/api/variantes", variantsRoutes);
-app.use("/api/ventas", salesRoutes);
+app.use("/api/venta", saleRoutes);
 
 // RUTA SIMPLE PARA PROBAR
 app.get('/', (req, res) => {
