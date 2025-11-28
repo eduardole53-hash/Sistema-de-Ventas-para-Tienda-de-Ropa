@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Ventas - Tienda de Ropa</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="main-header">
+    <div class="logo">
+      <span class="logo-mark">SR</span>
+      <span class="logo-text">Sistema de Ventas - Ropa</span>
+    </div>
+    <nav class="main-nav">
+      <span class="badge-env">Backend: http://localhost:4000</span>
+    </nav>
+  </header>
+
+  <main class="main-container">
+    <!-- Sección de Login -->
+    <section id="login-section" class="card auth-card">
+      <h2>Iniciar sesión</h2>
+      <p class="subtitle">Accede con tu usuario registrado en el sistema.</p>
+
+      <form id="login-form" class="form">
+        <div class="form-group">
+          <label for="username">Usuario</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Ej: admin"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="********"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Ingresar</button>
+        <p id="login-message" class="form-message"></p>
+      </form>
+    </section>
+
+    <!-- Sección de la aplicación (después del login) -->
+    <section id="app-section" class="app-layout hidden">
+      <!-- Sidebar -->
+      <aside class="sidebar card">
+        <h3>Panel</h3>
+        <div class="user-info">
+          <p><strong>Usuario:</strong> <span id="user-name">-</span></p>
+          <p><strong>Rol:</strong> <span id="user-role">-</span></p>
+        </div>
+
+        <div class="sidebar-menu">
+          <button class="btn btn-secondary btn-block" data-view="productos">
+            🧾 Ver productos
+          </button>
+          <!-- Más botones a futuro:
+          <button class="btn btn-secondary btn-block" data-view="pos">
+            🛒 Punto de venta
+          </button>
+          <button class="btn btn-secondary btn-block admin-only" data-view="admin">
+            ⚙️ Administración
+          </button>
+          -->
+        </div>
+
+        <button id="logout-btn" class="btn btn-outline btn-block mt-2">
+          Cerrar sesión
+        </button>
+      </aside>
+
+      <!-- Contenido principal -->
+      <section class="content card">
+        <header class="content-header">
+          <h2 id="content-title">Productos</h2>
+        </header>
+
+        <div id="view-productos" class="view active-view">
+          <div class="table-toolbar">
+            <h3>Listado de productos</h3>
+            <span id="productos-count" class="badge-info">0 productos</span>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Marca</th>
+                  <th>Categoría</th>
+                  <th>Descripción</th>
+                  <th>Imagen</th>
+                </tr>
+              </thead>
+              <tbody id="productos-table-body">
+                <!-- Se llena desde app.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <p id="productos-message" class="form-message"></p>
+        </div>
+
+        <!-- Aquí luego podemos agregar otras vistas:
+        <div id="view-pos" class="view">...</div>
+        <div id="view-admin" class="view">...</div>
+        -->
+      </section>
+    </section>
+  </main>
+
+  <footer class="main-footer">
+    <p>Sistema de Ventas para Tienda de Ropa &copy; 2025</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
