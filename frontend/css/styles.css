@@ -43,11 +43,27 @@ body {
   font-weight: 700;
   font-size: 0.9rem;
 }
-
+/*TEXTO DEL TITULO */
 .logo-text {
-  font-weight: 600;
-  font-size: 1rem;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
+  color: #ffffff;
 }
+
+.logo-mark {
+  background: #f97316;
+  color: #111827;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 50%;
+  letter-spacing: 1px;
+}
+
+
 
 /* Nueva barra de navegación superior */
 .main-nav {
