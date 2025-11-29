@@ -55,24 +55,46 @@ function productMatchesCategory(product, categoryFilter) {
   const catNorm = normalizeText(product.categoria);
   const nameNorm = normalizeText(product.nombre);
 
-  // Caso especial: "Chaquetas y Chalecos"
-  if (filterNorm === "chaquetas y chalecos") {
-    return (
-      catNorm.includes("chaqueta") ||
-      catNorm.includes("chaleco") ||
-      nameNorm.includes("chaqueta") ||
-      nameNorm.includes("chaleco")
-    );
+  // 🔹 Alias / sinónimos por categoría
+  const aliases = {
+    // Camisetas debe incluir blusas, t-shirts, sweaters, etc.
+    camisetas: [
+      "camiseta",
+      "camisetas",
+      "blusa",
+      "blusas",
+      "t shirt",
+      "t-shirt",
+      "playera",
+      "sueter",
+      "sweater",
+      "top"
+    ],
+    "chaquetas y chalecos": [
+      "chaqueta",
+      "chaquetas",
+      "chaleco",
+      "chalecos",
+      "jacket"
+    ],
+    basicos: ["basico", "básico", "basic", "essentials"]
+  };
+
+  // Si el filtro tiene alias definidos (por ejemplo "Camisetas")
+  const aliasList = aliases[filterNorm];
+  if (aliasList) {
+    // Revisar si alguna palabra alias aparece en categoría o nombre
+    const matchAlias = aliasList.some((word) => {
+      const w = normalizeText(word);
+      return catNorm.includes(w) || nameNorm.includes(w);
+    });
+    if (matchAlias) return true;
   }
 
-  // Caso "Básicos"
-  if (filterNorm === "basicos") {
-    return catNorm.includes("basico") || nameNorm.includes("basico");
-  }
-
-  // Genérico: buscar la palabra en categoría o nombre
+  // Caso general: buscar la palabra del filtro tal cual
   return catNorm.includes(filterNorm) || nameNorm.includes(filterNorm);
 }
+
 
 // --- Helpers de sesión cliente ---
 
