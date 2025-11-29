@@ -888,15 +888,16 @@ body {
 
 .category-scroll {
   width: 100%;
-  overflow: hidden;           /* 🔥 Oculta la barra de desplazamiento */
-  padding-bottom: 0.75rem;
+  overflow: hidden;           /* 🔥 Oculta cualquier barra de desplazamiento */
+  padding-bottom: 0.5rem;
   position: relative;
 }
 
+/* Cinta interna que se mueve sola hacia la izquierda */
 .category-scroll-inner {
   display: flex;
   gap: 1rem;
-  animation: categoryAutoScroll 25s linear infinite; /* 🔥 Scroll automático hacia la izquierda */
+  animation: categoryAutoScroll 30s linear infinite;
 }
 
 @keyframes categoryAutoScroll {
@@ -921,12 +922,13 @@ body {
   border-radius: 999px;
 }
 
+/* 🔥 Banner más pequeño */
 .category-banner {
   position: relative;
   border-radius: 0.9rem;
   overflow: hidden;
-  min-height: 230px;              /* 🔹 más alto */
-  min-width: 260px;
+  min-height: 140px;   /* 🔻 antes 230px: ahora más pequeño */
+  min-width: 220px;    /* 🔻 ligeramente más compacto */
   background: #e5e7eb;
 }
 
@@ -939,10 +941,10 @@ body {
 
 .category-banner-label {
   position: absolute;
-  left: 0.9rem;
-  bottom: 0.75rem;
-  padding: 0.3rem 0.9rem;
-  font-size: 0.85rem;
+  left: 0.7rem;
+  bottom: 0.55rem;
+  padding: 0.25rem 0.8rem;
+  font-size: 0.78rem;
   background: rgba(255, 255, 255, 0.95);
   color: #111827;
   border-radius: 999px;
@@ -1081,4 +1083,3 @@ body {
     background: transparent;
   }
 }
-
