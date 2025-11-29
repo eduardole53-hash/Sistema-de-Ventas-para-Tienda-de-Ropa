@@ -548,3 +548,272 @@ body {
   border: 1px solid #e5e7eb;
 }
 
+/* ===========================
+   Estilos mejorados para TIENDA EN LÍNEA
+   =========================== */
+
+.store-main {
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+/* Hero de la tienda */
+.store-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+  gap: 1.5rem;
+  background: radial-gradient(circle at top left, #fed7aa, #ffffff);
+  border: none;
+  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.12);
+}
+
+.store-hero-text h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.4rem;
+}
+
+.store-hero-text p {
+  font-size: 0.95rem;
+  color: #4b5563;
+  margin-bottom: 0.75rem;
+}
+
+.store-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.store-hero-badge {
+  font-size: 0.8rem;
+  background: #111827;
+  color: #f9fafb;
+  border-radius: 999px;
+  padding: 0.35rem 0.65rem;
+}
+
+.store-hero-image {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.store-hero-circle {
+  width: 160px;
+  height: 160px;
+  border-radius: 999px;
+  background: conic-gradient(
+    from 200deg,
+    #f97316,
+    #facc15,
+    #ecfeff,
+    #f97316
+  );
+  opacity: 0.25;
+}
+
+.store-hero-card {
+  position: absolute;
+  background: #111827;
+  color: #f9fafb;
+  border-radius: 0.9rem;
+  padding: 0.9rem 1rem;
+  font-size: 0.85rem;
+  max-width: 230px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.4);
+}
+
+/* Layout ajustado para tienda */
+.store-layout {
+  margin-top: 0.5rem;
+}
+
+.store-catalog-card {
+  background: #ffffff;
+}
+
+.store-catalog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+/* Chips de filtro (decorativos por ahora) */
+.store-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  font-size: 0.8rem;
+  cursor: default;
+  background: #f9fafb;
+}
+
+.chip-active {
+  background: #111827;
+  color: #f9fafb;
+  border-color: #111827;
+}
+
+/* Product cards más bonitos */
+.product-card {
+  background: #ffffff;
+  border-radius: 0.9rem;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.12s ease, box-shadow 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+  border-color: #fec89a;
+}
+
+.product-card-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-card-body {
+  padding: 0.75rem 0.9rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.product-card-body h3 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.product-price {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #b45309;
+}
+
+.product-description {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.product-card-actions {
+  align-items: flex-end;
+}
+
+.product-qty-input {
+  width: 80px;
+}
+
+.product-stock-msg {
+  font-size: 0.8rem;
+}
+
+/* Sidebar tienda */
+.ecom-sidebar {
+  gap: 0.75rem;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+}
+
+.ecom-card {
+  padding: 0.9rem 1rem;
+  background: #f9fafb;
+  border-radius: 0.9rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+.ecom-account-card h3,
+.ecom-cart-card h3 {
+  margin-bottom: 0.15rem;
+}
+
+.store-auth-tabs .btn {
+  font-size: 0.85rem;
+}
+
+/* Carrito */
+.ecom-cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge-cart {
+  background: #111827;
+  color: #f9fafb;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+.cart-table-wrapper {
+  max-height: 220px;
+  overflow-y: auto;
+  margin-top: 0.5rem;
+}
+
+.store-summary {
+  margin-top: 0.5rem;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 0.5rem;
+}
+
+.store-summary-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.store-summary-total {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Nav pill en header */
+.nav-link-pill {
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+  background: #f97316;
+  color: #111827;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .store-hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .store-catalog-header {
+    flex-direction: column;
+  }
+
+  .store-layout {
+    flex-direction: column-reverse;
+  }
+
+  .cart-table-wrapper {
+    max-height: 180px;
+  }
+}

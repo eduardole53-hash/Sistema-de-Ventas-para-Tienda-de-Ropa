@@ -10,22 +10,58 @@
   <header class="main-header">
     <div class="logo">
       <span class="logo-mark">MB</span>
-      <span class="logo-text">Moda Boutique Panamá - Tienda en línea</span>
+      <span class="logo-text">Moda Boutique Panamá</span>
     </div>
     <nav class="main-nav">
+      <span class="nav-link-pill">Tienda en línea</span>
       <span class="badge-env">Backend: http://localhost:4000</span>
     </nav>
   </header>
 
-  <main class="main-container">
-    <section class="app-layout">
+  <!-- Hero bonito para la tienda -->
+  <main class="main-container store-main">
+    <section class="store-hero card">
+      <div class="store-hero-text">
+        <h1>Descubre tu estilo hoy</h1>
+        <p>
+          Explora nuestro catálogo de blusas, pantalones y outfits seleccionados.
+          Compra en línea y recoge en tienda o recibe en la puerta de tu casa.
+        </p>
+        <div class="store-hero-actions">
+          <a href="#catalogo" class="btn btn-primary">
+            Ver catálogo
+          </a>
+          <span class="store-hero-badge">
+            ✨ Nuevas colecciones cada semana
+          </span>
+        </div>
+      </div>
+      <div class="store-hero-image">
+        <div class="store-hero-circle"></div>
+        <div class="store-hero-card">
+          <p>Hasta <strong>50% OFF</strong> en productos seleccionados</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Layout principal: catálogo + cuenta/carrito -->
+    <section class="app-layout store-layout" id="catalogo">
       <!-- Catálogo de productos -->
-      <section class="content card">
-        <header class="content-header">
-          <h2>Catálogo de productos</h2>
-          <p class="subtitle">
-            Explora las prendas disponibles y agrega tus favoritas al carrito.
-          </p>
+      <section class="content card store-catalog-card">
+        <header class="content-header store-catalog-header">
+          <div>
+            <h2>Catálogo de productos</h2>
+            <p class="subtitle">
+              Filtra por talla, color y variantes disponibles. Solo se muestran productos con stock.
+            </p>
+          </div>
+          <div class="store-filters">
+            <div class="chip chip-active">Todos</div>
+            <div class="chip">Blusas</div>
+            <div class="chip">Pantalones</div>
+            <div class="chip">Vestidos</div>
+            <div class="chip">Accesorios</div>
+          </div>
         </header>
 
         <div id="catalog-grid" class="catalog-grid">
@@ -38,13 +74,13 @@
       <!-- Sidebar: cuenta y carrito -->
       <aside class="sidebar card ecom-sidebar">
         <!-- Panel de cuenta -->
-        <section class="ecom-card">
+        <section class="ecom-card ecom-account-card">
           <h3>Mi cuenta</h3>
           <p class="subtitle" id="client-status">
             No has iniciado sesión.
           </p>
 
-          <div class="sidebar-menu">
+          <div class="sidebar-menu store-auth-tabs">
             <button
               class="btn btn-secondary btn-block"
               data-auth-tab="login"
@@ -134,9 +170,20 @@
         </section>
 
         <!-- Panel de carrito -->
-        <section class="ecom-card mt-2">
-          <h3>Carrito</h3>
-          <div class="table-wrapper">
+        <section class="ecom-card mt-2 ecom-cart-card">
+          <div class="ecom-cart-header">
+            <div>
+              <h3>Carrito</h3>
+              <p class="subtitle">
+                Revisa los productos antes de confirmar tu pedido.
+              </p>
+            </div>
+            <span class="badge-cart">
+              <span id="cart-count">0</span> ítems
+            </span>
+          </div>
+
+          <div class="table-wrapper cart-table-wrapper">
             <table class="table">
               <thead>
                 <tr>
@@ -153,14 +200,10 @@
             </table>
           </div>
 
-          <div class="pos-summary" style="margin-top: 0.5rem;">
+          <div class="pos-summary store-summary">
             <div>
-              <p>
-                <strong>Ítems:</strong>
-                <span id="cart-count">0</span>
-              </p>
-              <p>
-                <strong>Total:</strong>
+              <p class="store-summary-label">Total a pagar</p>
+              <p class="store-summary-total">
                 B/. <span id="cart-total">0.00</span>
               </p>
             </div>
