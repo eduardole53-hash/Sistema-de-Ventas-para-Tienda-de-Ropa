@@ -224,8 +224,10 @@
     </nav>
   </header>
 
+
   <!-- Hero de la tienda -->
   <main class="main-container store-main">
+    <!-- Hero principal -->
     <section class="store-hero card">
       <div class="store-hero-text">
         <h1>Descubre tu estilo hoy</h1>
@@ -250,8 +252,62 @@
       </div>
     </section>
 
+    <!-- Tira de colecciones (tipo camisetas, jeans, chaquetas...) -->
+    <section class="store-category-strip">
+      <div class="category-scroll">
+        <article class="category-banner">
+          <img
+            src="https://via.placeholder.com/600x400?text=Camisetas"
+            alt="Camisetas"
+          />
+          <span class="category-banner-label">Camisetas</span>
+        </article>
+
+        <article class="category-banner">
+          <img
+            src="https://via.placeholder.com/600x400?text=Camisas"
+            alt="Camisas"
+          />
+          <span class="category-banner-label">Camisas</span>
+        </article>
+
+        <article class="category-banner">
+          <img
+            src="https://via.placeholder.com/600x400?text=Jeans"
+            alt="Jeans"
+          />
+          <span class="category-banner-label">Jeans</span>
+        </article>
+
+        <article class="category-banner">
+          <img
+            src="https://via.placeholder.com/600x400?text=Chaquetas"
+            alt="Chaquetas"
+          />
+          <span class="category-banner-label">Chaquetas</span>
+        </article>
+
+        <article class="category-banner">
+          <img
+            src="https://via.placeholder.com/600x400?text=Chalecos"
+            alt="Chalecos"
+          />
+          <span class="category-banner-label">Chalecos</span>
+        </article>
+
+        <article class="category-banner">
+          <img
+            src="https://via.placeholder.com/600x400?text=Faldas"
+            alt="Faldas"
+          />
+          <span class="category-banner-label">Faldas</span>
+        </article>
+      </div>
+    </section>
+
     <!-- Catálogo de productos a todo el ancho -->
     <section class="content card store-catalog-card" id="catalogo">
+      <!-- Título + cantidad de productos -->
       <header class="content-header store-catalog-header">
         <div>
           <h2>Catálogo de productos</h2>
@@ -259,15 +315,39 @@
             Filtra por talla, color y variantes disponibles. Solo se muestran productos con stock.
           </p>
         </div>
-        <div class="store-filters">
-          <div class="chip chip-active">Todos</div>
-          <div class="chip">Blusas</div>
-          <div class="chip">Pantalones</div>
-          <div class="chip">Vestidos</div>
-          <div class="chip">Accesorios</div>
+        <div class="catalog-count-wrapper">
+          <span id="catalog-count" class="catalog-count-text">
+            0 productos
+          </span>
         </div>
       </header>
 
+      <!-- Barra tipo "ORDENAR POR / categorías / Filtros" -->
+      <div class="catalog-toolbar">
+        <button type="button" class="btn btn-outline catalog-sort-btn">
+          ORDENAR POR
+        </button>
+
+        <div class="catalog-tabs">
+          <button class="catalog-tab catalog-tab-active">New Arrivals</button>
+          <button class="catalog-tab">Básicos</button>
+          <button class="catalog-tab">Camisetas</button>
+          <button class="catalog-tab">Camisas</button>
+          <button class="catalog-tab">Pantalones</button>
+          <button class="catalog-tab">Jeans</button>
+          <button class="catalog-tab">Chaquetas y Chalecos</button>
+          <button class="catalog-tab">Shorts</button>
+          <button class="catalog-tab">Vestidos</button>
+          <button class="catalog-tab">Faldas</button>
+        </div>
+
+        <button type="button" class="catalog-filters-btn">
+          Filtros
+          <span class="filters-icon">☰</span>
+        </button>
+      </div>
+
+      <!-- Grid de productos -->
       <div id="catalog-grid" class="catalog-grid">
         <!-- Se llena desde tienda.js -->
       </div>

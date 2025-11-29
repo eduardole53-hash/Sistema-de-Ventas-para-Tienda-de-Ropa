@@ -5,6 +5,7 @@ const API_URL = "http://localhost:4000/api";
 // DOM catálogo
 const catalogGrid = document.getElementById("catalog-grid");
 const catalogMessage = document.getElementById("catalog-message");
+const catalogCountSpan = document.getElementById("catalog-count");
 
 // DOM cuenta cliente
 const clientStatus = document.getElementById("client-status");
@@ -192,8 +193,13 @@ function renderCatalog() {
   if (!Array.isArray(allProducts) || allProducts.length === 0) {
     catalogGrid.innerHTML = "";
     catalogMessage.textContent = "No hay productos disponibles.";
+    if (catalogCountSpan) {
+      catalogCountSpan.textContent = "0 productos";
+    }
     return;
   }
+
+  let visibleCount = 0;
 
   const cardsHtml = allProducts
     .map((p) => {
@@ -204,10 +210,12 @@ function renderCatalog() {
           (v.stock == null || v.stock > 0)
       );
 
-      // RF-4.2: Solo mostrar productos con stock disponible
+      // Solo mostrar productos con stock disponible
       if (variantsForProduct.length === 0) {
         return "";
       }
+
+      visibleCount++;
 
       const minPrice = Math.min(
         ...variantsForProduct.map((v) =>
@@ -274,7 +282,15 @@ function renderCatalog() {
     .join("");
 
   catalogGrid.innerHTML = cardsHtml || "";
+  if (catalogCountSpan) {
+    const label =
+      visibleCount === 1
+        ? "1 producto"
+        : `${visibleCount} productos`;
+    catalogCountSpan.textContent = label;
+  }
 }
+
 
 // --- Manejo de clicks en el catálogo (agregar al carrito) ---
 
