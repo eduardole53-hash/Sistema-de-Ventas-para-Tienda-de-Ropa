@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tienda en línea - Moda Boutique Panamá</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="main-header">
+    <div class="logo">
+      <span class="logo-mark">MB</span>
+      <span class="logo-text">Moda Boutique Panamá - Tienda en línea</span>
+    </div>
+    <nav class="main-nav">
+      <span class="badge-env">Backend: http://localhost:4000</span>
+    </nav>
+  </header>
+
+  <main class="main-container">
+    <section class="app-layout">
+      <!-- Catálogo de productos -->
+      <section class="content card">
+        <header class="content-header">
+          <h2>Catálogo de productos</h2>
+          <p class="subtitle">
+            Explora las prendas disponibles y agrega tus favoritas al carrito.
+          </p>
+        </header>
+
+        <div id="catalog-grid" class="catalog-grid">
+          <!-- Se llena desde tienda.js -->
+        </div>
+
+        <p id="catalog-message" class="form-message"></p>
+      </section>
+
+      <!-- Sidebar: cuenta y carrito -->
+      <aside class="sidebar card ecom-sidebar">
+        <!-- Panel de cuenta -->
+        <section class="ecom-card">
+          <h3>Mi cuenta</h3>
+          <p class="subtitle" id="client-status">
+            No has iniciado sesión.
+          </p>
+
+          <div class="sidebar-menu">
+            <button
+              class="btn btn-secondary btn-block"
+              data-auth-tab="login"
+              id="btn-tab-login"
+            >
+              Iniciar sesión
+            </button>
+            <button
+              class="btn btn-outline btn-block"
+              data-auth-tab="register"
+              id="btn-tab-register"
+            >
+              Crear cuenta
+            </button>
+          </div>
+
+          <!-- Login -->
+          <form id="client-login-form" class="form mt-2">
+            <div class="form-group">
+              <label for="client-login-email">Correo electrónico</label>
+              <input
+                type="email"
+                id="client-login-email"
+                placeholder="cliente@correo.com"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="client-login-password">Contraseña</label>
+              <input
+                type="password"
+                id="client-login-password"
+                placeholder="********"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Iniciar sesión
+            </button>
+            <p id="client-login-message" class="form-message"></p>
+          </form>
+
+          <!-- Registro -->
+          <form
+            id="client-register-form"
+            class="form mt-2 hidden"
+          >
+            <div class="form-group">
+              <label for="client-register-name">Nombre completo</label>
+              <input
+                type="text"
+                id="client-register-name"
+                placeholder="Ej: Ana Pérez"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="client-register-email">Correo electrónico</label>
+              <input
+                type="email"
+                id="client-register-email"
+                placeholder="cliente@correo.com"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="client-register-password">Contraseña</label>
+              <input
+                type="password"
+                id="client-register-password"
+                placeholder="Mínimo 6 caracteres"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Crear cuenta
+            </button>
+            <p id="client-register-message" class="form-message"></p>
+          </form>
+
+          <button
+            id="client-logout-btn"
+            class="btn btn-outline btn-block mt-2 hidden"
+          >
+            Cerrar sesión
+          </button>
+        </section>
+
+        <!-- Panel de carrito -->
+        <section class="ecom-card mt-2">
+          <h3>Carrito</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Variante</th>
+                  <th>Cant.</th>
+                  <th>Subtotal</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="cart-body">
+                <!-- Items del carrito -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pos-summary" style="margin-top: 0.5rem;">
+            <div>
+              <p>
+                <strong>Ítems:</strong>
+                <span id="cart-count">0</span>
+              </p>
+              <p>
+                <strong>Total:</strong>
+                B/. <span id="cart-total">0.00</span>
+              </p>
+            </div>
+          </div>
+
+          <form id="order-form" class="form mt-2">
+            <div class="form-group">
+              <label for="order-address">Dirección de envío</label>
+              <textarea
+                id="order-address"
+                rows="2"
+                placeholder="Calle, edificio, referencia..."
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="order-payment">Método de pago</label>
+              <select id="order-payment" required>
+                <option value="">Selecciona...</option>
+                <option value="Yappy">Yappy</option>
+                <option value="Tarjeta">Tarjeta</option>
+                <option value="Efectivo contra entrega">
+                  Efectivo contra entrega
+                </option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-secondary btn-block">
+              Realizar pedido
+            </button>
+            <p id="order-message" class="form-message"></p>
+          </form>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="main-footer">
+    <p>Moda Boutique Panamá &copy; 2025 - Tienda en línea</p>
+  </footer>
+
+  <script src="js/tienda.js"></script>
+</body>
+</html>
