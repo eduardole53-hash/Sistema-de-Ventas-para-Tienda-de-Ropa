@@ -920,8 +920,8 @@ body {
   position: relative;
   border-radius: 0.9rem;
   overflow: hidden;
-  min-height: 230px;
-  min-width: 260px;
+  min-height: 150px;
+  min-width: 200px;
   background: #e5e7eb;
 }
 
