@@ -6,7 +6,7 @@
   <title>Tienda en línea - Moda Boutique Panamá</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="page-tienda">
+<body>
   <header class="main-header">
     <div class="logo">
       <span class="logo-mark">MB</span>
@@ -14,228 +14,13 @@
     </div>
     <nav class="main-nav">
       <span class="badge-env">Backend: http://localhost:4000</span>
-      <a href="index.html" class="nav-link">Volver al panel principal</a>
     </nav>
   </header>
 
   <main class="main-container">
     <section class="app-layout">
-      <!-- Barra superior: Carrito, Mi cuenta, Datos del pedido -->
-      <section class="card ecom-toolbar">
-        <header class="content-header">
-          <h2>Gestiona tu compra</h2>
-          <p class="subtitle">
-            Usa estas opciones para revisar el carrito, tu cuenta y los datos del pedido.
-          </p>
-        </header>
-
-        <!-- Botones de menú -->
-        <div class="toolbar-tabs">
-          <button
-            type="button"
-            class="btn btn-secondary toolbar-tab-btn"
-            data-toolbar-target="cart"
-          >
-            Carrito
-          </button>
-          <button
-            type="button"
-            class="btn btn-outline toolbar-tab-btn"
-            data-toolbar-target="account"
-          >
-            Mi cuenta
-          </button>
-          <button
-            type="button"
-            class="btn btn-outline toolbar-tab-btn"
-            data-toolbar-target="order"
-          >
-            Datos del pedido
-          </button>
-        </div>
-
-        <!-- Paneles desplegables -->
-        <div class="toolbar-panels">
-          <!-- Panel: Carrito -->
-          <div class="toolbar-panel active" data-panel="cart">
-            <header class="content-header mt-2">
-              <h3>Carrito de compras</h3>
-              <p class="subtitle">
-                Revisa los productos seleccionados antes de confirmar tu pedido.
-              </p>
-            </header>
-
-            <div class="cart-summary">
-              <p>
-                Productos en carrito:
-                <span id="cart-count" class="badge">0</span>
-              </p>
-              <p>
-                Total:
-                <span id="cart-total">B/. 0.00</span>
-              </p>
-            </div>
-
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Producto</th>
-                  <th>Talla</th>
-                  <th>Color</th>
-                  <th>Cant.</th>
-                  <th>Subtotal</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="cart-body">
-                <!-- Filas generadas desde JS -->
-              </tbody>
-            </table>
-
-            <p id="cart-message" class="form-message"></p>
-          </div>
-
-          <!-- Panel: Mi cuenta -->
-          <div class="toolbar-panel" data-panel="account">
-            <header class="content-header mt-2">
-              <h3>Mi cuenta</h3>
-              <p class="subtitle">
-                Inicia sesión o crea una cuenta para comprar en línea.
-              </p>
-            </header>
-
-            <div id="client-status" class="client-status">
-              <!-- Se actualiza según sesión de cliente -->
-            </div>
-
-            <div class="tabs-auth">
-              <button
-                class="btn btn-secondary btn-block"
-                data-auth-tab="login"
-                id="btn-tab-login"
-              >
-                Iniciar sesión
-              </button>
-              <button
-                class="btn btn-outline btn-block"
-                data-auth-tab="register"
-                id="btn-tab-register"
-              >
-                Crear cuenta
-              </button>
-            </div>
-
-            <!-- Login -->
-            <form id="client-login-form" class="form mt-2">
-              <div class="form-group">
-                <label for="login-email">Correo electrónico</label>
-                <input
-                  type="email"
-                  id="login-email"
-                  placeholder="cliente@correo.com"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="login-password">Contraseña</label>
-                <input
-                  type="password"
-                  id="login-password"
-                  placeholder="********"
-                  required
-                />
-              </div>
-              <button type="submit" class="btn btn-primary btn-block">
-                Iniciar sesión
-              </button>
-              <p id="client-login-message" class="form-message"></p>
-            </form>
-
-            <!-- Registro -->
-            <form id="client-register-form" class="form mt-2 hidden">
-              <div class="form-group">
-                <label for="register-name">Nombre completo</label>
-                <input
-                  type="text"
-                  id="register-name"
-                  placeholder="Nombre del cliente"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="register-email">Correo electrónico</label>
-                <input
-                  type="email"
-                  id="register-email"
-                  placeholder="cliente@correo.com"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="register-password">Contraseña</label>
-                <input
-                  type="password"
-                  id="register-password"
-                  placeholder="********"
-                  required
-                />
-              </div>
-              <button type="submit" class="btn btn-secondary btn-block">
-                Crear cuenta
-              </button>
-              <p id="client-register-message" class="form-message"></p>
-            </form>
-
-            <button
-              type="button"
-              id="client-logout-btn"
-              class="btn btn-outline btn-block mt-2 hidden"
-            >
-              Cerrar sesión
-            </button>
-          </div>
-
-          <!-- Panel: Datos del pedido -->
-          <div class="toolbar-panel" data-panel="order">
-            <header class="content-header mt-2">
-              <h3>Datos del pedido</h3>
-              <p class="subtitle">
-                Completa la información para registrar tu compra.
-              </p>
-            </header>
-
-            <form id="order-form" class="form">
-              <div class="form-group">
-                <label for="order-address">Dirección de entrega</label>
-                <textarea
-                  id="order-address"
-                  rows="2"
-                  placeholder="Ejemplo: Calle 50, PH ejemplo, apartamento 5B"
-                  required
-                ></textarea>
-              </div>
-
-              <div class="form-group">
-                <label for="order-payment">Método de pago</label>
-                <select id="order-payment" required>
-                  <option value="">Selecciona una opción</option>
-                  <option value="efectivo">Efectivo contra entrega</option>
-                  <option value="yappy">Yappy / Transferencia</option>
-                  <option value="tarjeta">Tarjeta (en tienda)</option>
-                </select>
-              </div>
-
-              <button type="submit" class="btn btn-secondary btn-block">
-                Realizar pedido
-              </button>
-              <p id="order-message" class="form-message"></p>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      <!-- Catálogo de productos centrado -->
-      <section class="content card catalog-card">
+      <!-- Catálogo de productos -->
+      <section class="content card">
         <header class="content-header">
           <h2>Catálogo de productos</h2>
           <p class="subtitle">
@@ -243,68 +28,177 @@
           </p>
         </header>
 
-        <!-- Barra de búsqueda y filtros -->
-        <div class="catalog-toolbar">
-          <div class="catalog-search">
-            <input
-              type="text"
-              id="catalog-search"
-              placeholder="Buscar por nombre, marca o categoría..."
-            />
-          </div>
-          <div class="catalog-filters">
-            <select id="filter-category">
-              <option value="todas">Todas las categorías</option>
-            </select>
-            <select id="filter-size">
-              <option value="todas">Todas las tallas</option>
-            </select>
-            <select id="filter-color">
-              <option value="todos">Todos los colores</option>
-            </select>
-            <select id="filter-price">
-              <option value="todas">Todos los precios</option>
-              <option value="0-20">B/. 0 - 20</option>
-              <option value="20-40">B/. 20 - 40</option>
-              <option value="40-9999">B/. 40 o más</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Grid de productos -->
         <div id="catalog-grid" class="catalog-grid">
           <!-- Se llena desde tienda.js -->
         </div>
 
-        <!-- Paginación -->
-        <div id="catalog-pagination" class="catalog-pagination"></div>
-
         <p id="catalog-message" class="form-message"></p>
       </section>
+
+      <!-- Sidebar: cuenta y carrito -->
+      <aside class="sidebar card ecom-sidebar">
+        <!-- Panel de cuenta -->
+        <section class="ecom-card">
+          <h3>Mi cuenta</h3>
+          <p class="subtitle" id="client-status">
+            No has iniciado sesión.
+          </p>
+
+          <div class="sidebar-menu">
+            <button
+              class="btn btn-secondary btn-block"
+              data-auth-tab="login"
+              id="btn-tab-login"
+            >
+              Iniciar sesión
+            </button>
+            <button
+              class="btn btn-outline btn-block"
+              data-auth-tab="register"
+              id="btn-tab-register"
+            >
+              Crear cuenta
+            </button>
+          </div>
+
+          <!-- Login -->
+          <form id="client-login-form" class="form mt-2">
+            <div class="form-group">
+              <label for="client-login-email">Correo electrónico</label>
+              <input
+                type="email"
+                id="client-login-email"
+                placeholder="cliente@correo.com"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="client-login-password">Contraseña</label>
+              <input
+                type="password"
+                id="client-login-password"
+                placeholder="********"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Iniciar sesión
+            </button>
+            <p id="client-login-message" class="form-message"></p>
+          </form>
+
+          <!-- Registro -->
+          <form
+            id="client-register-form"
+            class="form mt-2 hidden"
+          >
+            <div class="form-group">
+              <label for="client-register-name">Nombre completo</label>
+              <input
+                type="text"
+                id="client-register-name"
+                placeholder="Ej: Ana Pérez"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="client-register-email">Correo electrónico</label>
+              <input
+                type="email"
+                id="client-register-email"
+                placeholder="cliente@correo.com"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="client-register-password">Contraseña</label>
+              <input
+                type="password"
+                id="client-register-password"
+                placeholder="Mínimo 6 caracteres"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Crear cuenta
+            </button>
+            <p id="client-register-message" class="form-message"></p>
+          </form>
+
+          <button
+            id="client-logout-btn"
+            class="btn btn-outline btn-block mt-2 hidden"
+          >
+            Cerrar sesión
+          </button>
+        </section>
+
+        <!-- Panel de carrito -->
+        <section class="ecom-card mt-2">
+          <h3>Carrito</h3>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Variante</th>
+                  <th>Cant.</th>
+                  <th>Subtotal</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="cart-body">
+                <!-- Items del carrito -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pos-summary" style="margin-top: 0.5rem;">
+            <div>
+              <p>
+                <strong>Ítems:</strong>
+                <span id="cart-count">0</span>
+              </p>
+              <p>
+                <strong>Total:</strong>
+                B/. <span id="cart-total">0.00</span>
+              </p>
+            </div>
+          </div>
+
+          <form id="order-form" class="form mt-2">
+            <div class="form-group">
+              <label for="order-address">Dirección de envío</label>
+              <textarea
+                id="order-address"
+                rows="2"
+                placeholder="Calle, edificio, referencia..."
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="order-payment">Método de pago</label>
+              <select id="order-payment" required>
+                <option value="">Selecciona...</option>
+                <option value="Yappy">Yappy</option>
+                <option value="Tarjeta">Tarjeta</option>
+                <option value="Efectivo contra entrega">
+                  Efectivo contra entrega
+                </option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-secondary btn-block">
+              Realizar pedido
+            </button>
+            <p id="order-message" class="form-message"></p>
+          </form>
+        </section>
+      </aside>
     </section>
   </main>
 
   <footer class="main-footer">
     <p>Moda Boutique Panamá &copy; 2025 - Tienda en línea</p>
   </footer>
-
-  <!-- Modal de variantes -->
-  <div id="variant-modal" class="modal hidden">
-    <div class="modal-backdrop"></div>
-    <div class="modal-dialog">
-      <button
-        id="variant-modal-close"
-        class="modal-close"
-        aria-label="Cerrar"
-        type="button"
-      >
-        &times;
-      </button>
-      <div id="variant-modal-body" class="modal-body">
-        <!-- Contenido generado desde tienda.js -->
-      </div>
-    </div>
-  </div>
 
   <script src="js/tienda.js"></script>
 </body>
