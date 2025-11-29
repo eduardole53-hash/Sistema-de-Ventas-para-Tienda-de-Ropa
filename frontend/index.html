@@ -30,7 +30,7 @@
             type="text"
             id="username"
             name="username"
-            placeholder="Ej: admin"
+            placeholder="Ej: Admin"
             required
           />
         </div>
@@ -65,7 +65,7 @@
           <button class="btn btn-secondary btn-block" data-view="productos">
             🧾 Ver productos
           </button>
-          <!-- Más botones a futuro:
+          <!-- Próximamente:
           <button class="btn btn-secondary btn-block" data-view="pos">
             🛒 Punto de venta
           </button>
@@ -87,6 +87,75 @@
         </header>
 
         <div id="view-productos" class="view active-view">
+          <!-- Panel de administración de productos (solo Admin) -->
+          <div id="product-admin-panel" class="product-admin-panel hidden">
+            <h3>Registrar nuevo producto</h3>
+            <p class="subtitle">
+              Completa los datos básicos del producto. Más adelante podrás agregar variantes (tallas, colores y stock).
+            </p>
+
+            <form id="product-form" class="form form-horizontal">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="product-name">Nombre *</label>
+                  <input
+                    type="text"
+                    id="product-name"
+                    placeholder="Ej: Blusa de lino"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="product-brand">Marca</label>
+                  <input
+                    type="text"
+                    id="product-brand"
+                    placeholder="Ej: Moda Boutique"
+                  />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="product-category">Categoría</label>
+                  <input
+                    type="text"
+                    id="product-category"
+                    placeholder="Ej: Blusas, Pantalones..."
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="product-image">URL de imagen</label>
+                  <input
+                    type="text"
+                    id="product-image"
+                    placeholder="https://ejemplo.com/imagen.jpg"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="product-description">Descripción</label>
+                <textarea
+                  id="product-description"
+                  rows="2"
+                  placeholder="Describe brevemente el producto..."
+                ></textarea>
+              </div>
+
+              <div class="form-row form-row-end">
+                <p id="product-form-message" class="form-message"></p>
+                <button type="submit" class="btn btn-primary">
+                  ➕ Guardar producto
+                </button>
+              </div>
+            </form>
+
+            <hr class="section-divider" />
+          </div>
+
           <div class="table-toolbar">
             <h3>Listado de productos</h3>
             <span id="productos-count" class="badge-info">0 productos</span>
@@ -128,3 +197,4 @@
   <script src="js/app.js"></script>
 </body>
 </html>
+

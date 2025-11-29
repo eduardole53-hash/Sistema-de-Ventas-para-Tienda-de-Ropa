@@ -15,7 +15,12 @@ const productosTableBody = document.getElementById("productos-table-body");
 const productosCountSpan = document.getElementById("productos-count");
 const productosMessage = document.getElementById("productos-message");
 
-// --- Gestión de sesión sencilla con localStorage ---
+// Panel de admin de productos
+const productAdminPanel = document.getElementById("product-admin-panel");
+const productForm = document.getElementById("product-form");
+const productFormMessage = document.getElementById("product-form-message");
+
+// --- Gestión de sesión con localStorage ---
 
 function saveSession(token, usuario, rol) {
   localStorage.setItem(
@@ -62,6 +67,17 @@ function showApp(session) {
 
   userNameSpan.textContent = session.usuario || "-";
   userRoleSpan.textContent = session.rol || "-";
+
+  // Mostrar panel de creación de productos solo a Admin
+  if (
+    session.rol &&
+    session.rol.toLowerCase() === "admin" &&
+    productAdminPanel
+  ) {
+    productAdminPanel.classList.remove("hidden");
+  } else if (productAdminPanel) {
+    productAdminPanel.classList.add("hidden");
+  }
 }
 
 // --- Manejo de login ---
@@ -105,8 +121,6 @@ loginForm.addEventListener("submit", async (e) => {
 
     const data = await response.json();
 
-    // En tu backend devuelves algo como:
-    // { mensaje: 'Login exitoso', token }
     const token = data.token;
     if (!token) {
       loginMessage.textContent = "No se recibió token del servidor.";
@@ -114,13 +128,18 @@ loginForm.addEventListener("submit", async (e) => {
       return;
     }
 
-    // Decodificar payload del JWT para obtener usuario y rol (solo para mostrar)
-    const payloadBase64 = token.split(".")[1];
-    const payloadJson = atob(payloadBase64);
-    const payload = JSON.parse(payloadJson);
-
-    const usuario = payload.nombre_usuario || username;
-    const rol = payload.rol || "Desconocido";
+    // Decodificar payload del JWT para obtener usuario y rol
+    let usuario = username;
+    let rol = "Desconocido";
+    try {
+      const payloadBase64 = token.split(".")[1];
+      const payloadJson = atob(payloadBase64);
+      const payload = JSON.parse(payloadJson);
+      usuario = payload.nombre_usuario || usuario;
+      rol = payload.rol || rol;
+    } catch (e) {
+      console.warn("No se pudo decodificar el token JWT:", e);
+    }
 
     saveSession(token, usuario, rol);
     loginMessage.textContent = "Inicio de sesión exitoso.";
@@ -142,6 +161,7 @@ logoutBtn.addEventListener("click", () => {
   clearSession();
   productosTableBody.innerHTML = "";
   productosMessage.textContent = "";
+  productosCountSpan.textContent = "0 productos";
   showLogin();
 });
 
@@ -154,13 +174,19 @@ async function loadProductos(token) {
   productosCountSpan.textContent = "Cargando...";
 
   try {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    // GET /productos en tu backend no requiere auth,
+    // pero si tenemos token, lo enviamos igual por consistencia
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${API_URL}/productos`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        // Aunque GET /productos no requiere auth, podemos enviar el token:
-        Authorization: `Bearer ${token}`,
-      },
+      headers,
     });
 
     if (!response.ok) {
@@ -216,6 +242,98 @@ async function loadProductos(token) {
   }
 }
 
+// --- Crear un nuevo producto (solo Admin) ---
+
+async function createProduct(formData) {
+  const session = loadSession();
+  if (!session || !session.token) {
+    productFormMessage.textContent =
+      "Sesión no válida. Vuelve a iniciar sesión.";
+    productFormMessage.classList.add("error");
+    return;
+  }
+
+  productFormMessage.textContent = "";
+  productFormMessage.classList.remove("error", "success");
+
+  try {
+    const response = await fetch(`${API_URL}/productos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.token}`,
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const msg =
+        errorData.mensaje ||
+        errorData.error ||
+        "No se pudo crear el producto.";
+      productFormMessage.textContent = msg;
+      productFormMessage.classList.add("error");
+      return;
+    }
+
+    await response.json(); // producto creado
+
+    productFormMessage.textContent = "Producto creado correctamente.";
+    productFormMessage.classList.add("success");
+
+    // Limpiar campos
+    productForm.reset();
+
+    // Recargar lista de productos
+    loadProductos(session.token);
+  } catch (error) {
+    console.error("Error creando producto:", error);
+    productFormMessage.textContent =
+      "Error al conectar con el servidor para crear el producto.";
+    productFormMessage.classList.add("error");
+  }
+}
+
+// --- Listener del formulario de producto ---
+
+if (productForm) {
+  productForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    productFormMessage.textContent = "";
+    productFormMessage.classList.remove("error", "success");
+
+    const nombre = document.getElementById("product-name").value.trim();
+    const marca = document.getElementById("product-brand").value.trim();
+    const categoria = document
+      .getElementById("product-category")
+      .value.trim();
+    const imagen_url = document
+      .getElementById("product-image")
+      .value.trim();
+    const descripcion = document
+      .getElementById("product-description")
+      .value.trim();
+
+    if (!nombre) {
+      productFormMessage.textContent =
+        "El nombre del producto es obligatorio.";
+      productFormMessage.classList.add("error");
+      return;
+    }
+
+    const payload = {
+      nombre,
+      descripcion,
+      marca,
+      categoria,
+      imagen_url,
+    };
+
+    createProduct(payload);
+  });
+}
+
 // --- Iniciar al cargar la página ---
 document.addEventListener("DOMContentLoaded", initFromSession);
-
