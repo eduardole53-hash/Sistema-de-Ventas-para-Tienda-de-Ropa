@@ -1,6 +1,6 @@
 // URL base de tu backend
 const API_URL = "http://localhost:4000/api";
-// ENDPOINT de ventas (ajusta a '/venta' si tu backend usa singular)
+// Endpoint de ventas
 const SALES_ENDPOINT = `${API_URL}/venta`;
 
 // Elementos del DOM
@@ -38,7 +38,6 @@ const variantForm = document.getElementById("variant-form");
 const variantFormMessage = document.getElementById("variant-form-message");
 
 // POS
-const posView = document.getElementById("view-pos");
 const posItemForm = document.getElementById("pos-item-form");
 const posProductSelect = document.getElementById("pos-product-select");
 const posVariantSelect = document.getElementById("pos-variant-select");
@@ -55,12 +54,23 @@ const posCustomerInput = document.getElementById("pos-customer-name");
 const posPaymentSelect = document.getElementById("pos-payment-method");
 const posConfirmBtn = document.getElementById("pos-confirm-btn");
 
+// Recibo
+const receiptPanel = document.getElementById("receipt-panel");
+const receiptIdSpan = document.getElementById("receipt-id");
+const receiptDateSpan = document.getElementById("receipt-date");
+const receiptCustomerSpan = document.getElementById("receipt-customer");
+const receiptPaymentSpan = document.getElementById("receipt-payment");
+const receiptItemsBody = document.getElementById("receipt-items-body");
+const receiptTotalSpan = document.getElementById("receipt-total");
+const receiptPrintBtn = document.getElementById("receipt-print-btn");
+
 // Estado global
 let currentVariantProduct = null;
 let allProducts = [];
 let allVariants = [];
 let posCart = [];
 let posInitialized = false;
+let lastReceipt = null;
 
 // --- Gestión de sesión con localStorage ---
 
@@ -193,7 +203,6 @@ loginForm.addEventListener("submit", async (e) => {
       return;
     }
 
-    // Decodificar payload del JWT para obtener usuario y rol
     let usuario = username;
     let rol = "Desconocido";
     try {
@@ -318,7 +327,7 @@ async function loadProductos(token) {
   }
 }
 
-// --- Crear un nuevo producto (solo Admin) ---
+// --- Crear producto ---
 
 async function createProduct(formData) {
   const session = loadSession();
@@ -368,8 +377,6 @@ async function createProduct(formData) {
     productFormMessage.classList.add("error");
   }
 }
-
-// --- Listener del formulario de producto ---
 
 if (productForm) {
   productForm.addEventListener("submit", (e) => {
@@ -669,6 +676,7 @@ function resetPOS() {
   posItemMessage.classList.remove("error", "success");
   posStockInfo.textContent = "";
   posStockInfo.classList.remove("error", "success");
+
   if (posProductSelect) {
     posProductSelect.innerHTML =
       '<option value="">Selecciona un producto...</option>';
@@ -680,6 +688,12 @@ function resetPOS() {
   }
   posQuantityInput.value = "1";
   posUnitPriceInput.value = "";
+
+  // ocultar recibo
+  if (receiptPanel) {
+    receiptPanel.classList.add("hidden");
+  }
+
   posInitialized = false;
 }
 
@@ -722,7 +736,6 @@ async function initPOS() {
     allProducts = Array.isArray(productos) ? productos : [];
     allVariants = Array.isArray(variantes) ? variantes : [];
 
-    // Llenar select de productos
     posProductSelect.innerHTML =
       '<option value="">Selecciona un producto...</option>';
 
@@ -955,6 +968,45 @@ if (posCartBody) {
   });
 }
 
+// --- Recibo ---
+
+function renderReceipt() {
+  if (!lastReceipt || !receiptPanel) return;
+
+  receiptIdSpan.textContent = lastReceipt.id_venta || "N/D";
+  receiptDateSpan.textContent = lastReceipt.fecha;
+  receiptCustomerSpan.textContent =
+    lastReceipt.cliente || "Consumidor final";
+  receiptPaymentSpan.textContent = lastReceipt.metodo_pago || "-";
+  receiptTotalSpan.textContent = lastReceipt.total.toFixed(2);
+
+  const rows = lastReceipt.items
+    .map((item) => {
+      const subtotal = item.cantidad * item.precio;
+      return `
+        <tr>
+          <td>${item.producto}</td>
+          <td>${item.talla}</td>
+          <td>${item.color}</td>
+          <td>${item.sku}</td>
+          <td>${item.cantidad}</td>
+          <td>${item.precio.toFixed(2)}</td>
+          <td>${subtotal.toFixed(2)}</td>
+        </tr>
+      `;
+    })
+    .join("");
+
+  receiptItemsBody.innerHTML = rows;
+  receiptPanel.classList.remove("hidden");
+}
+
+if (receiptPrintBtn) {
+  receiptPrintBtn.addEventListener("click", () => {
+    window.print();
+  });
+}
+
 if (posConfirmBtn) {
   posConfirmBtn.addEventListener("click", async () => {
     posCartMessage.textContent = "";
@@ -983,10 +1035,16 @@ if (posConfirmBtn) {
       return;
     }
 
+    const cartSnapshot = posCart.map((item) => ({ ...item }));
+    const total = cartSnapshot.reduce(
+      (sum, i) => sum + i.precio * i.cantidad,
+      0
+    );
+
     const payload = {
       metodo_pago: metodoPago,
       cliente: cliente || null,
-      items: posCart.map((item) => ({
+      items: cartSnapshot.map((item) => ({
         id_variante: item.id_variante,
         cantidad: item.cantidad,
         precio_unitario: item.precio,
@@ -1014,7 +1072,23 @@ if (posConfirmBtn) {
         return;
       }
 
-      await response.json();
+      const data = await response.json();
+
+      const nowStr = new Date().toLocaleString("es-PA");
+      const saleId =
+        data.id_venta || data.id || data.idVenta || data.id_venta_pk || null;
+      const saleDate = data.fecha || data.fecha_venta || nowStr;
+
+      lastReceipt = {
+        id_venta: saleId,
+        fecha: saleDate,
+        cliente: cliente || "Consumidor final",
+        metodo_pago: metodoPago,
+        total,
+        items: cartSnapshot,
+      };
+
+      renderReceipt();
 
       posCartMessage.textContent = "Venta registrada correctamente.";
       posCartMessage.classList.add("success");
@@ -1025,9 +1099,9 @@ if (posConfirmBtn) {
       posCustomerInput.value = "";
       posPaymentSelect.value = "";
 
-      // Refrescar productos y variantes para reflejar cambios de stock
       posInitialized = false;
       await initPOS();
+
       const sessionAgain = loadSession();
       if (sessionAgain && sessionAgain.token) {
         loadProductos(sessionAgain.token);

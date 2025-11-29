@@ -411,6 +411,73 @@
               </div>
             </div>
           </div>
+
+          <!-- Panel de recibo -->
+          <div id="receipt-panel" class="receipt-panel hidden">
+            <div class="receipt-header">
+              <div>
+                <h4>Recibo de venta</h4>
+                <p class="subtitle">
+                  Comprobante generado automáticamente después de la venta.
+                </p>
+              </div>
+              <button id="receipt-print-btn" class="btn btn-outline btn-small">
+                Imprimir recibo
+              </button>
+            </div>
+
+            <div class="receipt-body">
+              <!-- Encabezado de la tienda -->
+              <div class="receipt-store-header">
+                <h3>Moda Boutique Panamá</h3>
+                <p>RUC: 0-000-0000  DV 00</p>
+                <p>Dirección: Calle Principal, Ciudad de Panamá, Panamá</p>
+                <p>Tel: (507) 6000-0000 &nbsp;·&nbsp; Instagram: @modaboutique.pa</p>
+                <!-- Cambia estos datos por los reales de tu tienda -->
+              </div>
+
+              <!-- Datos de la venta -->
+              <div class="receipt-meta">
+                <p><strong>N.º de venta:</strong> <span id="receipt-id">-</span></p>
+                <p><strong>Fecha:</strong> <span id="receipt-date">-</span></p>
+                <p><strong>Cliente:</strong> <span id="receipt-customer">-</span></p>
+                <p><strong>Método de pago:</strong> <span id="receipt-payment">-</span></p>
+              </div>
+
+              <!-- Detalle de items -->
+              <div class="table-wrapper">
+                <table class="table receipt-table">
+                  <thead>
+                    <tr>
+                      <th>Producto</th>
+                      <th>Talla</th>
+                      <th>Color</th>
+                      <th>SKU</th>
+                      <th>Cant.</th>
+                      <th>Precio</th>
+                      <th>Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody id="receipt-items-body">
+                    <!-- Items del recibo -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="receipt-total-row">
+                <p>
+                  <strong>Total:</strong>
+                  B/. <span id="receipt-total">0.00</span>
+                </p>
+              </div>
+
+              <!-- Texto fijo al final del recibo -->
+              <div class="receipt-footer-note">
+                <p>¡Gracias por su compra!</p>
+                <p>Cambios solo con recibo físico dentro de 30 días.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </section>
@@ -423,3 +490,4 @@
   <script src="js/app.js"></script>
 </body>
 </html>
+
