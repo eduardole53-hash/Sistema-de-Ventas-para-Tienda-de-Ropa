@@ -1,6 +1,7 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
+// src/server.js
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
 
 const app = express();
 
@@ -13,16 +14,20 @@ const userRoutes = require("./routes/user");
 const productsRoutes = require("./routes/products");
 const variantsRoutes = require("./routes/variants");
 const saleRoutes = require("./routes/sale");
+const clientesRoutes = require("./routes/clientes");
+const pedidosRoutes = require("./routes/pedidos");
 
-// USAR RUTAS
+// MONTAR RUTAS CON PREFIJO /api
 app.use("/api/usuario", userRoutes);
 app.use("/api/productos", productsRoutes);
 app.use("/api/variantes", variantsRoutes);
 app.use("/api/venta", saleRoutes);
+app.use("/api/clientes", clientesRoutes);
+app.use("/api/pedidos", pedidosRoutes);
 
 // RUTA SIMPLE PARA PROBAR
-app.get('/', (req, res) => {
-  res.send('API funcionando correctamente');
+app.get("/", (req, res) => {
+  res.send("API funcionando correctamente");
 });
 
 // LEVANTAR SERVIDOR
