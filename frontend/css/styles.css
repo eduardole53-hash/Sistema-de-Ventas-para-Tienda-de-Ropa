@@ -192,7 +192,6 @@ body {
   color: #111827;
 }
 
-
 /* Mostrar dropdown con hover o clase .is-open */
 .dropdown:hover .dropdown-panel,
 .dropdown.is-open .dropdown-panel {
@@ -707,7 +706,6 @@ body {
   margin-inline: auto;
 }
 
-
 /* Hero de la tienda */
 .store-hero {
   width: 100%;
@@ -879,7 +877,6 @@ body {
   }
 }
 
-
 /* ===========================
    Tira de colecciones (banners)
    =========================== */
@@ -890,12 +887,25 @@ body {
 }
 
 .category-scroll {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(260px, 1fr); /* 🔹 más ancho cada banner */
-  gap: 1rem;
-  overflow-x: auto;
+  width: 100%;
+  overflow: hidden;           /* 🔥 Oculta la barra de desplazamiento */
   padding-bottom: 0.75rem;
+  position: relative;
+}
+
+.category-scroll-inner {
+  display: flex;
+  gap: 1rem;
+  animation: categoryAutoScroll 25s linear infinite; /* 🔥 Scroll automático hacia la izquierda */
+}
+
+@keyframes categoryAutoScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .category-scroll::-webkit-scrollbar {
@@ -916,6 +926,7 @@ body {
   border-radius: 0.9rem;
   overflow: hidden;
   min-height: 230px;              /* 🔹 más alto */
+  min-width: 260px;
   background: #e5e7eb;
 }
 
@@ -937,7 +948,6 @@ body {
   border-radius: 999px;
   font-weight: 600;
 }
-
 
 /* ===========================
    Barra de categorías + filtros
@@ -1071,3 +1081,4 @@ body {
     background: transparent;
   }
 }
+
