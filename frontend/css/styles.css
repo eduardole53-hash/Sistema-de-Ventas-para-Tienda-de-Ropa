@@ -888,25 +888,17 @@ body {
 
 .category-scroll {
   width: 100%;
-  overflow: hidden;           /* Oculta cualquier scroll */
+  overflow: hidden;           /* 🔥 Oculta la barra de desplazamiento */
   padding-bottom: 0.75rem;
   position: relative;
 }
 
-/* Contenedor interno que se mueve */
 .category-scroll-inner {
   display: flex;
   gap: 1rem;
-  width: max-content;                /* 🔹 Toma el ancho real de TODAS las tarjetas */
-  animation: categoryAutoScroll 35s linear infinite; /* 🔹 Más suave y continuo */
+  animation: categoryAutoScroll 25s linear infinite; /* 🔥 Scroll automático hacia la izquierda */
 }
 
-/* Pausa opcional al pasar el mouse */
-.category-scroll-inner:hover {
-  animation-play-state: paused;
-}
-
-/* El truco: recorre exactamente la mitad del contenido duplicado */
 @keyframes categoryAutoScroll {
   0% {
     transform: translateX(0);
@@ -915,35 +907,6 @@ body {
     transform: translateX(-50%);
   }
 }
-
-.category-banner {
-  position: relative;
-  border-radius: 0.9rem;
-  overflow: hidden;
-  min-height: 150px;
-  min-width: 200px;
-  background: #e5e7eb;
-}
-
-.category-banner img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.category-banner-label {
-  position: absolute;
-  left: 0.9rem;
-  bottom: 0.75rem;
-  padding: 0.3rem 0.9rem;
-  font-size: 0.85rem;
-  background: rgba(255, 255, 255, 0.95);
-  color: #111827;
-  border-radius: 999px;
-  font-weight: 600;
-}
-
 
 .category-scroll::-webkit-scrollbar {
   height: 6px;
