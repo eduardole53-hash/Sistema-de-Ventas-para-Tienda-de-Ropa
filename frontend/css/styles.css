@@ -507,3 +507,81 @@ body {
   }
 }
 
+/*-----------------------------------------------------------------*/
+
+/* --- Ajuste general de ancho y centrado para todas las páginas --- */
+
+/* El main ahora es más angosto y centrado en la ventana */
+main.main-container {
+  width: 100%;
+  max-width: 1100px;
+  align-self: center;
+}
+
+/* El login de index.html más compacto */
+.auth-card {
+  width: 100%;
+  max-width: 430px;
+}
+
+/* Layout específico para la página de tienda */
+body.page-tienda .app-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* El catálogo ocupa una tarjeta centrada */
+.catalog-card {
+  margin: 0 auto;
+}
+
+/* Grid de productos centrado y más “pro” */
+.catalog-grid {
+  margin-top: 0.85rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.9rem;
+  justify-items: center;
+}
+
+/* --- Barra superior (Carrito / Cuenta / Pedido) --- */
+
+.ecom-toolbar {
+  margin-bottom: 0.75rem;
+}
+
+.toolbar-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.toolbar-panels {
+  margin-top: 0.75rem;
+}
+
+.toolbar-panel {
+  display: none;
+}
+
+.toolbar-panel.active {
+  display: block;
+}
+
+/* Pequeños ajustes dentro de los paneles */
+.cart-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.cart-summary p {
+  margin: 0;
+}
+
+

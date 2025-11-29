@@ -963,3 +963,48 @@ document.addEventListener("DOMContentLoaded", () => {
   loadCart();
   loadCatalog();
 });
+
+
+/**--------------------------------------------------------------- */
+
+
+
+// --- Paneles superiores: Carrito / Mi cuenta / Datos del pedido ---
+
+function initToolbarPanels() {
+  const buttons = document.querySelectorAll(".toolbar-tab-btn");
+  const panels = document.querySelectorAll(".toolbar-panel");
+
+  if (!buttons.length || !panels.length) return;
+
+  function activatePanel(target) {
+    // Cambiar estilos de botones
+    buttons.forEach((btn) => {
+      const isActive = btn.dataset.toolbarTarget === target;
+      btn.classList.toggle("btn-secondary", isActive);
+      btn.classList.toggle("btn-outline", !isActive);
+    });
+
+    // Mostrar/ocultar paneles
+    panels.forEach((panel) => {
+      const isMatch = panel.dataset.panel === target;
+      panel.classList.toggle("active", isMatch);
+    });
+  }
+
+  // Panel inicial
+  activatePanel("cart");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.toolbarTarget;
+      if (!target) return;
+      activatePanel(target);
+    });
+  });
+}
+
+// Inicializar paneles cuando cargue el DOM
+document.addEventListener("DOMContentLoaded", () => {
+  initToolbarPanels();
+});
