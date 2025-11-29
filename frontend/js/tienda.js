@@ -57,7 +57,7 @@ function productMatchesCategory(product, categoryFilter) {
 
   // 🔹 Alias / sinónimos por categoría
   const aliases = {
-    // Camisetas debe incluir blusas, t-shirts, sweaters, etc.
+    // Camisetas: blusas, t-shirt, sweaters, etc.
     camisetas: [
       "camiseta",
       "camisetas",
@@ -70,6 +70,8 @@ function productMatchesCategory(product, categoryFilter) {
       "sweater",
       "top"
     ],
+
+    // Chaquetas y chalecos
     "chaquetas y chalecos": [
       "chaqueta",
       "chaquetas",
@@ -77,13 +79,56 @@ function productMatchesCategory(product, categoryFilter) {
       "chalecos",
       "jacket"
     ],
-    basicos: ["basico", "básico", "basic", "essentials"]
+
+    // Accesorios (antes Básicos)
+    accesorios: [
+      "accesorio",
+      "accesorios",
+      "correa",
+      "correas",
+      "pulsera",
+      "pulseras",
+      "cartera",
+      "carteras",
+      "anillo",
+      "anillos",
+      "collar",
+      "collares",
+      "perfume",
+      "perfumes",
+      "arete",
+      "aretes",
+      "reloj",
+      "relojes",
+      "lente",
+      "lentes",
+      "gorra",
+      "gorras",
+      "sombrero",
+      "sombreros"
+    ],
+
+    // Zapatos (antes Camisas)
+    zapatos: [
+      "zapatilla",
+      "zapatillas",
+      "sandalia",
+      "sandalias",
+      "zapato",
+      "zapatos",
+      "chancleta",
+      "chancletas",
+      "tacon",
+      "tacones"
+    ],
+
+    // Faldas
+    faldas: ["falda", "faldas"]
   };
 
-  // Si el filtro tiene alias definidos (por ejemplo "Camisetas")
+  // Si el filtro tiene alias definidos (por ejemplo "Camisetas", "Accesorios", "Zapatos", "Faldas")
   const aliasList = aliases[filterNorm];
   if (aliasList) {
-    // Revisar si alguna palabra alias aparece en categoría o nombre
     const matchAlias = aliasList.some((word) => {
       const w = normalizeText(word);
       return catNorm.includes(w) || nameNorm.includes(w);
@@ -91,9 +136,10 @@ function productMatchesCategory(product, categoryFilter) {
     if (matchAlias) return true;
   }
 
-  // Caso general: buscar la palabra del filtro tal cual
+  // Caso general: buscar la palabra del filtro tal cual en categoría o nombre
   return catNorm.includes(filterNorm) || nameNorm.includes(filterNorm);
 }
+
 
 
 // --- Helpers de sesión cliente ---
