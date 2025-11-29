@@ -552,16 +552,21 @@ body {
    Estilos mejorados para TIENDA EN LÍNEA
    =========================== */
 
+/* ===========================
+   Estilos mejorados para TIENDA EN LÍNEA
+   =========================== */
+
 .store-main {
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  max-width: 1200px;
+  max-width: 1280px;
   margin-inline: auto;
 }
 
 /* Hero de la tienda */
 .store-hero {
+  width: 100%;
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
   gap: 1.5rem;
@@ -629,12 +634,75 @@ body {
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.4);
 }
 
-/* Layout ajustado para tienda */
-.store-layout {
+/* Barra superior: Mi cuenta + Carrito */
+.store-top {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr);
+  gap: 1rem;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.ecom-card {
+  padding: 0.9rem 1rem;
+  background: #f9fafb;
+  border-radius: 0.9rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+.ecom-account-card h3,
+.ecom-cart-card h3 {
+  margin-bottom: 0.15rem;
+}
+
+.store-auth-tabs .btn {
+  font-size: 0.85rem;
+}
+
+/* Carrito */
+.ecom-cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge-cart {
+  background: #111827;
+  color: #f9fafb;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+.cart-table-wrapper {
+  max-height: 220px;
+  overflow-y: auto;
   margin-top: 0.5rem;
 }
 
+.store-summary {
+  margin-top: 0.5rem;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 0.5rem;
+}
+
+.store-summary-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.store-summary-total {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Catálogo ancho */
 .store-catalog-card {
+  width: 100%;
   background: #ffffff;
 }
 
@@ -667,7 +735,7 @@ body {
   border-color: #111827;
 }
 
-/* Product cards más bonitos */
+/* Product cards */
 .product-card {
   background: #ffffff;
   border-radius: 0.9rem;
@@ -726,67 +794,12 @@ body {
   font-size: 0.8rem;
 }
 
-/* Sidebar tienda */
-.ecom-sidebar {
-  gap: 0.75rem;
-  background: transparent;
-  box-shadow: none;
-  border: none;
-  padding: 0;
-}
-
-.ecom-card {
-  padding: 0.9rem 1rem;
-  background: #f9fafb;
-  border-radius: 0.9rem;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
-}
-
-.ecom-account-card h3,
-.ecom-cart-card h3 {
-  margin-bottom: 0.15rem;
-}
-
-.store-auth-tabs .btn {
-  font-size: 0.85rem;
-}
-
-/* Carrito */
-.ecom-cart-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.badge-cart {
-  background: #111827;
-  color: #f9fafb;
-  border-radius: 999px;
-  padding: 0.25rem 0.7rem;
-  font-size: 0.8rem;
-}
-
-.cart-table-wrapper {
-  max-height: 220px;
-  overflow-y: auto;
-  margin-top: 0.5rem;
-}
-
-.store-summary {
-  margin-top: 0.5rem;
-  border-top: 1px solid #e5e7eb;
-  padding-top: 0.5rem;
-}
-
-.store-summary-label {
-  font-size: 0.8rem;
-  color: #6b7280;
-}
-
-.store-summary-total {
-  font-size: 1.1rem;
-  font-weight: 700;
+/* Catálogo grid */
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 /* Nav pill en header */
@@ -805,12 +818,12 @@ body {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .store-catalog-header {
-    flex-direction: column;
+  .store-top {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .store-layout {
-    flex-direction: column-reverse;
+  .store-catalog-header {
+    flex-direction: column;
   }
 
   .cart-table-wrapper {
