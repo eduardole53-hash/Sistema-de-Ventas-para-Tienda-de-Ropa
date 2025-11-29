@@ -43,9 +43,12 @@ const ecomReceiptTotalSpan = document.getElementById("ecom-receipt-total");
 const ecomReceiptPrintBtn = document.getElementById("ecom-receipt-print-btn");
 const ecomReceiptCloseBtn = document.getElementById("ecom-receipt-close-btn");
 
+// --- Dropdowns header (Mi cuenta / Mi carrito) ---
+const accountDropdown = document.getElementById("account-dropdown");
+const cartDropdown = document.getElementById("cart-dropdown");
+
 // Estado del recibo
 let lastEcomReceipt = null;
-
 
 // Estado global
 let allProducts = [];
@@ -155,7 +158,70 @@ function productMatchesCategory(product, categoryFilter) {
   return catNorm.includes(filterNorm) || nameNorm.includes(filterNorm);
 }
 
+// --- Toggle de paneles laterales (Mi cuenta / Mi carrito) ---
 
+(function initHeaderPanels() {
+  if (accountDropdown) {
+    const accountToggleBtn = accountDropdown.querySelector(".dropdown-toggle");
+    const accountCloseBtns = accountDropdown.querySelectorAll(".panel-close-btn");
+
+    if (accountToggleBtn) {
+      accountToggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = accountDropdown.classList.contains("is-open");
+        accountDropdown.classList.toggle("is-open", !isOpen);
+        if (!isOpen && cartDropdown) {
+          cartDropdown.classList.remove("is-open");
+        }
+      });
+    }
+
+    accountCloseBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        accountDropdown.classList.remove("is-open");
+      });
+    });
+  }
+
+  if (cartDropdown) {
+    const cartToggleBtn = cartDropdown.querySelector(".dropdown-toggle");
+    const cartCloseBtns = cartDropdown.querySelectorAll(".panel-close-btn");
+
+    if (cartToggleBtn) {
+      cartToggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = cartDropdown.classList.contains("is-open");
+        cartDropdown.classList.toggle("is-open", !isOpen);
+        if (!isOpen && accountDropdown) {
+          accountDropdown.classList.remove("is-open");
+        }
+      });
+    }
+
+    cartCloseBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        cartDropdown.classList.remove("is-open");
+      });
+    });
+  }
+
+  // Cerrar ambos paneles al hacer click fuera
+  document.addEventListener("click", (e) => {
+    const target = e.target;
+    if (
+      accountDropdown &&
+      !accountDropdown.contains(target)
+    ) {
+      accountDropdown.classList.remove("is-open");
+    }
+    if (
+      cartDropdown &&
+      !cartDropdown.contains(target)
+    ) {
+      cartDropdown.classList.remove("is-open");
+    }
+  });
+})();
 
 // --- Helpers de sesión cliente ---
 
@@ -777,7 +843,6 @@ if (ecomReceiptPrintBtn) {
   });
 }
 
-
 // --- Realizar pedido (RF-4.4) ---
 
 orderForm.addEventListener("submit", async (e) => {
@@ -883,9 +948,6 @@ orderForm.addEventListener("submit", async (e) => {
   }
 });
 
-
-// --- Inicio ---
-
 // --- Inicio ---
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -893,65 +955,4 @@ document.addEventListener("DOMContentLoaded", () => {
   loadClientSession();
   loadCart();
   loadCatalog();
-
-  // -----------------------------
-  // Toggle de paneles: Mi cuenta / Mi carrito
-  // -----------------------------
-  const accountDropdown = document.getElementById("account-dropdown");
-  const cartDropdown = document.getElementById("cart-dropdown");
-
-  function closeAllDropdowns() {
-    [accountDropdown, cartDropdown].forEach((el) => {
-      if (el) el.classList.remove("is-open");
-    });
-  }
-
-  // Mi cuenta
-  if (accountDropdown) {
-    const accountBtn = accountDropdown.querySelector(".dropdown-toggle");
-    const accountPanel = accountDropdown.querySelector(".dropdown-panel");
-
-    if (accountBtn) {
-      accountBtn.addEventListener("click", (e) => {
-        e.stopPropagation(); // evita que se cierre por el click global
-        const isOpen = accountDropdown.classList.contains("is-open");
-        closeAllDropdowns();
-        if (!isOpen) accountDropdown.classList.add("is-open");
-      });
-    }
-
-    if (accountPanel) {
-      // Para poder hacer click dentro del panel sin que se cierre
-      accountPanel.addEventListener("click", (e) => {
-        e.stopPropagation();
-      });
-    }
-  }
-
-  // Mi carrito
-  if (cartDropdown) {
-    const cartBtn = cartDropdown.querySelector(".dropdown-toggle");
-    const cartPanel = cartDropdown.querySelector(".dropdown-panel");
-
-    if (cartBtn) {
-      cartBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const isOpen = cartDropdown.classList.contains("is-open");
-        closeAllDropdowns();
-        if (!isOpen) cartDropdown.classList.add("is-open");
-      });
-    }
-
-    if (cartPanel) {
-      cartPanel.addEventListener("click", (e) => {
-        e.stopPropagation();
-      });
-    }
-  }
-
-  // Cerrar paneles al hacer click fuera
-  document.addEventListener("click", () => {
-    closeAllDropdowns();
-  });
 });
-
