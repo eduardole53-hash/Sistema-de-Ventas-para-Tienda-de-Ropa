@@ -125,20 +125,25 @@ body {
   position: relative;
 }
 
+/* Botón icono + texto (Mi cuenta / Mi carrito) */
 .icon-btn {
   position: relative;
-  width: 32px;
-  height: 32px;
   border-radius: 999px;
   border: none;
   background: #f9fafb;
   color: #111827;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 1rem;
-  padding: 0;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.75rem;
+  gap: 0.35rem;
+}
+
+.nav-icon-label {
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
 /* Badge pequeño en el icono del carrito */
@@ -155,19 +160,22 @@ body {
   text-align: center;
 }
 
-/* Dropdowns de cuenta / carrito */
+/* Dropdowns de cuenta / carrito -> ahora panel lateral derecho */
 .dropdown {
   position: relative;
 }
 
+/* Panel lateral derecho */
 .dropdown-panel {
-  position: absolute;
+  position: fixed;
   right: 0;
-  top: 120%;
+  top: 0;
+  height: 100vh;
   width: 360px;
+  max-width: 90vw;
   background: transparent;
-  border-radius: 0.9rem;
-  padding: 0;
+  border-radius: 0;
+  padding: 1rem;
   border: none;
   box-shadow: none;
   display: none;
@@ -181,10 +189,10 @@ body {
   border-radius: 0.9rem;
   border: 1px solid #e5e7eb;
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.45);
-  color: #111827;           /* 🔹 Texto negro dentro del panel */
+  color: #111827;
 }
 
-/* Aseguramos también subtítulos y labels en oscuro */
+/* Texto oscuro dentro del panel */
 .dropdown-panel h3,
 .dropdown-panel .subtitle,
 .dropdown-panel label,
@@ -192,8 +200,7 @@ body {
   color: #111827;
 }
 
-/* Mostrar dropdown con hover o clase .is-open */
-.dropdown:hover .dropdown-panel,
+/* Mostrar panel cuando tenga la clase .is-open */
 .dropdown.is-open .dropdown-panel {
   display: block;
 }
@@ -888,18 +895,19 @@ body {
 
 .category-scroll {
   width: 100%;
-  overflow: hidden;           /* 🔥 Oculta cualquier barra de desplazamiento */
-  padding-bottom: 0.5rem;
+  overflow: hidden;
+  padding-bottom: 0.75rem;
   position: relative;
 }
 
-/* Cinta interna que se mueve sola hacia la izquierda */
+/* Contenedor interno que se desplaza automáticamente */
 .category-scroll-inner {
-  display: flex;
+  display: inline-flex;
   gap: 1rem;
   animation: categoryAutoScroll 30s linear infinite;
 }
 
+/* Scroll automático horizontal */
 @keyframes categoryAutoScroll {
   0% {
     transform: translateX(0);
@@ -922,13 +930,12 @@ body {
   border-radius: 999px;
 }
 
-/* 🔥 Banner más pequeño */
 .category-banner {
   position: relative;
   border-radius: 0.9rem;
   overflow: hidden;
-  min-height: 140px;   /* 🔻 antes 230px: ahora más pequeño */
-  min-width: 220px;    /* 🔻 ligeramente más compacto */
+  min-height: 180px;
+  min-width: 230px;
   background: #e5e7eb;
 }
 
@@ -941,10 +948,10 @@ body {
 
 .category-banner-label {
   position: absolute;
-  left: 0.7rem;
-  bottom: 0.55rem;
-  padding: 0.25rem 0.8rem;
-  font-size: 0.78rem;
+  left: 0.9rem;
+  bottom: 0.75rem;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.85rem;
   background: rgba(255, 255, 255, 0.95);
   color: #111827;
   border-radius: 999px;

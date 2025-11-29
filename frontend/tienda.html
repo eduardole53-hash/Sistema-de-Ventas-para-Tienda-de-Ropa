@@ -31,7 +31,7 @@
       <div class="nav-right">
         <span class="badge-env">Backend: http://localhost:4000</span>
 
-        <!-- Dropdown Mi cuenta -->
+        <!-- Botón + panel Mi cuenta -->
         <div class="nav-icon dropdown" id="account-dropdown">
           <button
             class="icon-btn dropdown-toggle"
@@ -39,6 +39,7 @@
             type="button"
           >
             👤
+            <span class="nav-icon-label">Mi cuenta</span>
           </button>
 
           <div class="dropdown-panel dropdown-account">
@@ -139,7 +140,7 @@
           </div>
         </div>
 
-        <!-- Dropdown Carrito -->
+        <!-- Botón + panel Carrito -->
         <div class="nav-icon dropdown" id="cart-dropdown">
           <button
             class="icon-btn dropdown-toggle"
@@ -147,6 +148,7 @@
             type="button"
           >
             🛒
+            <span class="nav-icon-label">Mi carrito</span>
             <span class="nav-cart-badge" id="cart-count-badge">0</span>
           </button>
 
@@ -227,9 +229,8 @@
     <!-- Tira de colecciones GRANDE -->
     <section class="store-category-strip">
       <div class="category-scroll">
-        <!-- 🔥 Cinta interna para scroll automático + duplicada para bucle infinito -->
         <div class="category-scroll-inner">
-          <!-- Primer bloque de banners -->
+          <!-- Primera serie de banners -->
           <article
             class="category-banner js-category-filter"
             data-category="Camisetas"
@@ -296,7 +297,7 @@
             <span class="category-banner-label">Faldas</span>
           </article>
 
-          <!-- Segundo bloque duplicado para scroll infinito -->
+          <!-- Segunda serie de banners (duplicados para scroll infinito suave) -->
           <article
             class="category-banner js-category-filter"
             data-category="Camisetas"
@@ -541,3 +542,4 @@
   <script src="js/tienda.js"></script>
 </body>
 </html>
+
