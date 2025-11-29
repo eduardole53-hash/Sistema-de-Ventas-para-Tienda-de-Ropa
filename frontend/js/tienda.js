@@ -886,10 +886,72 @@ orderForm.addEventListener("submit", async (e) => {
 
 // --- Inicio ---
 
+// --- Inicio ---
+
 document.addEventListener("DOMContentLoaded", () => {
   switchAuthTab("login");
   loadClientSession();
   loadCart();
   loadCatalog();
+
+  // -----------------------------
+  // Toggle de paneles: Mi cuenta / Mi carrito
+  // -----------------------------
+  const accountDropdown = document.getElementById("account-dropdown");
+  const cartDropdown = document.getElementById("cart-dropdown");
+
+  function closeAllDropdowns() {
+    [accountDropdown, cartDropdown].forEach((el) => {
+      if (el) el.classList.remove("is-open");
+    });
+  }
+
+  // Mi cuenta
+  if (accountDropdown) {
+    const accountBtn = accountDropdown.querySelector(".dropdown-toggle");
+    const accountPanel = accountDropdown.querySelector(".dropdown-panel");
+
+    if (accountBtn) {
+      accountBtn.addEventListener("click", (e) => {
+        e.stopPropagation(); // evita que se cierre por el click global
+        const isOpen = accountDropdown.classList.contains("is-open");
+        closeAllDropdowns();
+        if (!isOpen) accountDropdown.classList.add("is-open");
+      });
+    }
+
+    if (accountPanel) {
+      // Para poder hacer click dentro del panel sin que se cierre
+      accountPanel.addEventListener("click", (e) => {
+        e.stopPropagation();
+      });
+    }
+  }
+
+  // Mi carrito
+  if (cartDropdown) {
+    const cartBtn = cartDropdown.querySelector(".dropdown-toggle");
+    const cartPanel = cartDropdown.querySelector(".dropdown-panel");
+
+    if (cartBtn) {
+      cartBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = cartDropdown.classList.contains("is-open");
+        closeAllDropdowns();
+        if (!isOpen) cartDropdown.classList.add("is-open");
+      });
+    }
+
+    if (cartPanel) {
+      cartPanel.addEventListener("click", (e) => {
+        e.stopPropagation();
+      });
+    }
+  }
+
+  // Cerrar paneles al hacer click fuera
+  document.addEventListener("click", () => {
+    closeAllDropdowns();
+  });
 });
 
