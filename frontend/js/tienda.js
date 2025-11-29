@@ -739,10 +739,43 @@ if (ecomReceiptCloseBtn) {
 
 if (ecomReceiptPrintBtn) {
   ecomReceiptPrintBtn.addEventListener("click", () => {
-    window.print();
+    const receiptPanel = document.getElementById("ecom-receipt-panel");
+    if (!receiptPanel) return;
+
+    const printContents = receiptPanel.innerHTML;
+
+    // Abrimos una nueva ventana solo para el recibo
+    const printWindow = window.open("", "_blank", "width=600,height=800");
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <meta charset="UTF-8" />
+        <title>Recibo de compra</title>
+        <link rel="stylesheet" href="css/styles.css" />
+        <style>
+          body {
+            background: #ffffff;
+            padding: 1rem;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="receipt-panel">
+          ${printContents}
+        </div>
+      </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    // Opcional: cerrar la ventana después de imprimir
+    printWindow.close();
   });
 }
-
 
 
 // --- Realizar pedido (RF-4.4) ---
