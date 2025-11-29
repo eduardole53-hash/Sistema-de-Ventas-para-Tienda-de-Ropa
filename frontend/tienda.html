@@ -12,9 +12,221 @@
       <span class="logo-mark">MB</span>
       <span class="logo-text">Moda Boutique Panamá</span>
     </div>
+
     <nav class="main-nav">
-      <span class="nav-link-pill">Tienda en línea</span>
-      <span class="badge-env">Backend: http://localhost:4000</span>
+      <!-- Links de secciones -->
+      <ul class="nav-links">
+        <li><a href="#catalogo">Nuevo</a></li>
+        <li><a href="#catalogo">Hombre</a></li>
+        <li><a href="#catalogo">Mujer</a></li>
+        <li><a href="#catalogo">Denim</a></li>
+      </ul>
+
+      <!-- Barra de búsqueda -->
+      <div class="nav-search">
+        <input
+          type="text"
+          id="store-search"
+          placeholder="Buscar productos..."
+          aria-label="Buscar productos"
+        />
+        <button type="button" class="search-btn" aria-label="Buscar">
+          🔍
+        </button>
+      </div>
+
+      <!-- Iconos derecha -->
+      <div class="nav-right">
+        <span class="badge-env">Backend: http://localhost:4000</span>
+
+        <!-- Dropdown Mi cuenta -->
+        <div class="nav-icon dropdown" id="account-dropdown">
+          <button
+            class="icon-btn dropdown-toggle"
+            aria-label="Mi cuenta"
+            type="button"
+          >
+            👤
+          </button>
+
+          <div class="dropdown-panel dropdown-account">
+            <section class="ecom-card ecom-account-card">
+              <h3>Mi cuenta</h3>
+              <p class="subtitle" id="client-status">
+                No has iniciado sesión.
+              </p>
+
+              <div class="sidebar-menu store-auth-tabs">
+                <button
+                  class="btn btn-secondary btn-block"
+                  data-auth-tab="login"
+                  id="btn-tab-login"
+                >
+                  Iniciar sesión
+                </button>
+                <button
+                  class="btn btn-outline btn-block"
+                  data-auth-tab="register"
+                  id="btn-tab-register"
+                >
+                  Crear cuenta
+                </button>
+              </div>
+
+              <!-- Login -->
+              <form id="client-login-form" class="form mt-2">
+                <div class="form-group">
+                  <label for="client-login-email">Correo electrónico</label>
+                  <input
+                    type="email"
+                    id="client-login-email"
+                    placeholder="cliente@correo.com"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="client-login-password">Contraseña</label>
+                  <input
+                    type="password"
+                    id="client-login-password"
+                    placeholder="********"
+                    required
+                  />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                  Iniciar sesión
+                </button>
+                <p id="client-login-message" class="form-message"></p>
+              </form>
+
+              <!-- Registro -->
+              <form
+                id="client-register-form"
+                class="form mt-2 hidden"
+              >
+                <div class="form-group">
+                  <label for="client-register-name">Nombre completo</label>
+                  <input
+                    type="text"
+                    id="client-register-name"
+                    placeholder="Ej: Ana Pérez"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="client-register-email">Correo electrónico</label>
+                  <input
+                    type="email"
+                    id="client-register-email"
+                    placeholder="cliente@correo.com"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="client-register-password">Contraseña</label>
+                  <input
+                    type="password"
+                    id="client-register-password"
+                    placeholder="Mínimo 6 caracteres"
+                    required
+                  />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                  Crear cuenta
+                </button>
+                <p id="client-register-message" class="form-message"></p>
+              </form>
+
+              <button
+                id="client-logout-btn"
+                class="btn btn-outline btn-block mt-2 hidden"
+              >
+                Cerrar sesión
+              </button>
+            </section>
+          </div>
+        </div>
+
+        <!-- Dropdown Carrito -->
+        <div class="nav-icon dropdown" id="cart-dropdown">
+          <button
+            class="icon-btn dropdown-toggle"
+            aria-label="Carrito"
+            type="button"
+          >
+            🛒
+            <span class="nav-cart-badge" id="cart-count-badge">0</span>
+          </button>
+
+          <div class="dropdown-panel dropdown-cart">
+            <section class="ecom-card ecom-cart-card">
+              <div class="ecom-cart-header">
+                <div>
+                  <h3>Carrito</h3>
+                  <p class="subtitle">
+                    Revisa los productos antes de confirmar tu pedido.
+                  </p>
+                </div>
+                <span class="badge-cart">
+                  <span id="cart-count">0</span> ítems
+                </span>
+              </div>
+
+              <div class="table-wrapper cart-table-wrapper">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Producto</th>
+                      <th>Variante</th>
+                      <th>Cant.</th>
+                      <th>Subtotal</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="cart-body">
+                    <!-- Items del carrito -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="pos-summary store-summary">
+                <div>
+                  <p class="store-summary-label">Total a pagar</p>
+                  <p class="store-summary-total">
+                    B/. <span id="cart-total">0.00</span>
+                  </p>
+                </div>
+              </div>
+
+              <form id="order-form" class="form mt-2">
+                <div class="form-group">
+                  <label for="order-address">Dirección de envío</label>
+                  <textarea
+                    id="order-address"
+                    rows="2"
+                    placeholder="Calle, edificio, referencia..."
+                  ></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="order-payment">Método de pago</label>
+                  <select id="order-payment" required>
+                    <option value="">Selecciona...</option>
+                    <option value="Yappy">Yappy</option>
+                    <option value="Tarjeta">Tarjeta</option>
+                    <option value="Efectivo contra entrega">
+                      Efectivo contra entrega
+                    </option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-secondary btn-block">
+                  Realizar pedido
+                </button>
+                <p id="order-message" class="form-message"></p>
+              </form>
+            </section>
+          </div>
+        </div>
+      </div>
     </nav>
   </header>
 
@@ -42,172 +254,6 @@
           <p>Hasta <strong>50% OFF</strong> en productos seleccionados</p>
         </div>
       </div>
-    </section>
-
-    <!-- Barra superior con Mi cuenta + Carrito -->
-    <section class="store-top card">
-      <!-- Panel de cuenta -->
-      <section class="ecom-card ecom-account-card">
-        <h3>Mi cuenta</h3>
-        <p class="subtitle" id="client-status">
-          No has iniciado sesión.
-        </p>
-
-        <div class="sidebar-menu store-auth-tabs">
-          <button
-            class="btn btn-secondary btn-block"
-            data-auth-tab="login"
-            id="btn-tab-login"
-          >
-            Iniciar sesión
-          </button>
-          <button
-            class="btn btn-outline btn-block"
-            data-auth-tab="register"
-            id="btn-tab-register"
-          >
-            Crear cuenta
-          </button>
-        </div>
-
-        <!-- Login -->
-        <form id="client-login-form" class="form mt-2">
-          <div class="form-group">
-            <label for="client-login-email">Correo electrónico</label>
-            <input
-              type="email"
-              id="client-login-email"
-              placeholder="cliente@correo.com"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="client-login-password">Contraseña</label>
-            <input
-              type="password"
-              id="client-login-password"
-              placeholder="********"
-              required
-            />
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">
-            Iniciar sesión
-          </button>
-          <p id="client-login-message" class="form-message"></p>
-        </form>
-
-        <!-- Registro -->
-        <form
-          id="client-register-form"
-          class="form mt-2 hidden"
-        >
-          <div class="form-group">
-            <label for="client-register-name">Nombre completo</label>
-            <input
-              type="text"
-              id="client-register-name"
-              placeholder="Ej: Ana Pérez"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="client-register-email">Correo electrónico</label>
-            <input
-              type="email"
-              id="client-register-email"
-              placeholder="cliente@correo.com"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="client-register-password">Contraseña</label>
-            <input
-              type="password"
-              id="client-register-password"
-              placeholder="Mínimo 6 caracteres"
-              required
-            />
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">
-            Crear cuenta
-          </button>
-          <p id="client-register-message" class="form-message"></p>
-        </form>
-
-        <button
-          id="client-logout-btn"
-          class="btn btn-outline btn-block mt-2 hidden"
-        >
-          Cerrar sesión
-        </button>
-      </section>
-
-      <!-- Panel de carrito -->
-      <section class="ecom-card ecom-cart-card">
-        <div class="ecom-cart-header">
-          <div>
-            <h3>Carrito</h3>
-            <p class="subtitle">
-              Revisa los productos antes de confirmar tu pedido.
-            </p>
-          </div>
-          <span class="badge-cart">
-            <span id="cart-count">0</span> ítems
-          </span>
-        </div>
-
-        <div class="table-wrapper cart-table-wrapper">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Variante</th>
-                <th>Cant.</th>
-                <th>Subtotal</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody id="cart-body">
-              <!-- Items del carrito -->
-            </tbody>
-          </table>
-        </div>
-
-        <div class="pos-summary store-summary">
-          <div>
-            <p class="store-summary-label">Total a pagar</p>
-            <p class="store-summary-total">
-              B/. <span id="cart-total">0.00</span>
-            </p>
-          </div>
-        </div>
-
-        <form id="order-form" class="form mt-2">
-          <div class="form-group">
-            <label for="order-address">Dirección de envío</label>
-            <textarea
-              id="order-address"
-              rows="2"
-              placeholder="Calle, edificio, referencia..."
-            ></textarea>
-          </div>
-          <div class="form-group">
-            <label for="order-payment">Método de pago</label>
-            <select id="order-payment" required>
-              <option value="">Selecciona...</option>
-              <option value="Yappy">Yappy</option>
-              <option value="Tarjeta">Tarjeta</option>
-              <option value="Efectivo contra entrega">
-                Efectivo contra entrega
-              </option>
-            </select>
-          </div>
-          <button type="submit" class="btn btn-secondary btn-block">
-            Realizar pedido
-          </button>
-          <p id="order-message" class="form-message"></p>
-        </form>
-      </section>
     </section>
 
     <!-- Catálogo de productos a todo el ancho -->
@@ -243,4 +289,5 @@
   <script src="js/tienda.js"></script>
 </body>
 </html>
+
 

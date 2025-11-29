@@ -25,6 +25,9 @@ const orderAddressInput = document.getElementById("order-address");
 const orderPaymentSelect = document.getElementById("order-payment");
 const orderMessage = document.getElementById("order-message");
 
+// 🔹 Nuevo: badge pequeño en el icono del carrito
+const cartCountBadge = document.getElementById("cart-count-badge");
+
 // Estado global
 let allProducts = [];
 let allVariants = [];
@@ -96,6 +99,7 @@ function renderCart() {
     cartBody.innerHTML = "";
     cartCountSpan.textContent = "0";
     cartTotalSpan.textContent = "0.00";
+    if (cartCountBadge) cartCountBadge.textContent = "0";
     return;
   }
 
@@ -121,6 +125,9 @@ function renderCart() {
 
   cartBody.innerHTML = rowsHtml;
   cartCountSpan.textContent = String(cart.length);
+  if (cartCountBadge) {
+    cartCountBadge.textContent = String(cart.length);
+  }
   cartTotalSpan.textContent = total.toFixed(2);
 
   saveCart();
@@ -575,4 +582,27 @@ document.addEventListener("DOMContentLoaded", () => {
   loadClientSession();
   loadCart();
   loadCatalog();
+
+  // 🔹 Dropdowns (abrir/cerrar con click)
+  const dropdownToggles = document.querySelectorAll(".dropdown-toggle");
+
+  dropdownToggles.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const parent = btn.closest(".dropdown");
+      if (!parent) return;
+      parent.classList.toggle("is-open");
+    });
+  });
+
+  // Cerrar dropdowns al hacer click fuera
+  document.addEventListener("click", (e) => {
+    dropdownToggles.forEach((btn) => {
+      const parent = btn.closest(".dropdown");
+      if (!parent) return;
+      if (!parent.contains(e.target)) {
+        parent.classList.remove("is-open");
+      }
+    });
+  });
 });

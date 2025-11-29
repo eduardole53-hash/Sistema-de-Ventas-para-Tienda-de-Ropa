@@ -23,6 +23,10 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
 .logo {
@@ -45,11 +49,144 @@ body {
   font-size: 1rem;
 }
 
-.main-nav .badge-env {
+/* Nueva barra de navegación superior */
+.main-nav {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  justify-content: space-between;
+}
+
+/* Links tipo NUEVO / HOMBRE / MUJER / DENIM */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.25rem;
+  text-transform: uppercase;
   font-size: 0.8rem;
-  background: #374151;
-  padding: 0.25rem 0.5rem;
+  letter-spacing: 0.08em;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #e5e7eb;
+}
+
+.nav-links a:hover {
+  color: #f97316;
+}
+
+/* Barra de búsqueda */
+.nav-search {
+  flex: 1;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 999px;
+  background: #f9fafb;
+  color: #6b7280;
+}
+
+.nav-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.85rem;
+  color: #111827;
+}
+
+.search-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* Zona derecha (backend + iconos) */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.main-nav .badge-env {
+  font-size: 0.7rem;
+  background: #374151;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+}
+
+/* Iconos usuario / carrito */
+.nav-icon {
+  position: relative;
+}
+
+.icon-btn {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  background: #f9fafb;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+}
+
+/* Badge pequeño en el icono del carrito */
+.nav-cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #f97316;
+  color: #111827;
+  border-radius: 999px;
+  padding: 0 0.25rem;
+  font-size: 0.7rem;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* Dropdowns de cuenta / carrito */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-panel {
+  position: absolute;
+  right: 0;
+  top: 120%;
+  width: 360px;
+  background: transparent;
+  border-radius: 0.9rem;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  display: none;
+  z-index: 40;
+}
+
+/* Reutilizamos .ecom-card como panel */
+.dropdown-panel .ecom-card {
+  padding: 0.9rem 1rem;
+  background: #f9fafb;
+  border-radius: 0.9rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.45);
+}
+
+/* Mostrar dropdown con hover o clase .is-open */
+.dropdown:hover .dropdown-panel,
+.dropdown.is-open .dropdown-panel {
+  display: block;
 }
 
 /* Layout principal */
@@ -186,7 +323,7 @@ body {
   color: #15803d;
 }
 
-/* Layout de la app */
+/* Layout de la app (para sistema de ventas interno) */
 .app-layout {
   display: flex;
   gap: 1rem;
@@ -515,7 +652,7 @@ body {
 .product-price {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #111827;
+  color: #b45309;
 }
 
 .product-description {
@@ -536,7 +673,7 @@ body {
   font-size: 0.8rem;
 }
 
-/* Sidebar ecommerce */
+/* Sidebar ecommerce (para ciertas vistas) */
 .ecom-sidebar {
   gap: 0.75rem;
 }
@@ -547,10 +684,6 @@ body {
   border-radius: 0.75rem;
   border: 1px solid #e5e7eb;
 }
-
-/* ===========================
-   Estilos mejorados para TIENDA EN LÍNEA
-   =========================== */
 
 /* ===========================
    Estilos mejorados para TIENDA EN LÍNEA
@@ -634,72 +767,6 @@ body {
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.4);
 }
 
-/* Barra superior: Mi cuenta + Carrito */
-.store-top {
-  width: 100%;
-  display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr);
-  gap: 1rem;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-}
-
-.ecom-card {
-  padding: 0.9rem 1rem;
-  background: #f9fafb;
-  border-radius: 0.9rem;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
-}
-
-.ecom-account-card h3,
-.ecom-cart-card h3 {
-  margin-bottom: 0.15rem;
-}
-
-.store-auth-tabs .btn {
-  font-size: 0.85rem;
-}
-
-/* Carrito */
-.ecom-cart-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.badge-cart {
-  background: #111827;
-  color: #f9fafb;
-  border-radius: 999px;
-  padding: 0.25rem 0.7rem;
-  font-size: 0.8rem;
-}
-
-.cart-table-wrapper {
-  max-height: 220px;
-  overflow-y: auto;
-  margin-top: 0.5rem;
-}
-
-.store-summary {
-  margin-top: 0.5rem;
-  border-top: 1px solid #e5e7eb;
-  padding-top: 0.5rem;
-}
-
-.store-summary-label {
-  font-size: 0.8rem;
-  color: #6b7280;
-}
-
-.store-summary-total {
-  font-size: 1.1rem;
-  font-weight: 700;
-}
-
 /* Catálogo ancho */
 .store-catalog-card {
   width: 100%;
@@ -735,7 +802,7 @@ body {
   border-color: #111827;
 }
 
-/* Product cards */
+/* Hover product cards */
 .product-card {
   background: #ffffff;
   border-radius: 0.9rem;
@@ -766,34 +833,6 @@ body {
   gap: 0.3rem;
 }
 
-.product-card-body h3 {
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.product-price {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #b45309;
-}
-
-.product-description {
-  font-size: 0.85rem;
-  color: #6b7280;
-}
-
-.product-card-actions {
-  align-items: flex-end;
-}
-
-.product-qty-input {
-  width: 80px;
-}
-
-.product-stock-msg {
-  font-size: 0.8rem;
-}
-
 /* Catálogo grid */
 .catalog-grid {
   display: grid;
@@ -802,31 +841,29 @@ body {
   margin-top: 1rem;
 }
 
-/* Nav pill en header */
-.nav-link-pill {
-  margin-right: 0.5rem;
-  font-size: 0.8rem;
-  background: #f97316;
-  color: #111827;
-  border-radius: 999px;
-  padding: 0.25rem 0.7rem;
-}
-
 /* Responsive */
 @media (max-width: 900px) {
-  .store-hero {
-    grid-template-columns: minmax(0, 1fr);
+  .main-header {
+    flex-wrap: wrap;
+    align-items: flex-start;
   }
 
-  .store-top {
+  .main-nav {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+
+  .nav-search {
+    order: 3;
+    width: 100%;
+    max-width: none;
+  }
+
+  .store-hero {
     grid-template-columns: minmax(0, 1fr);
   }
 
   .store-catalog-header {
     flex-direction: column;
-  }
-
-  .cart-table-wrapper {
-    max-height: 180px;
   }
 }
