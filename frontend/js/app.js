@@ -1,7 +1,7 @@
 // URL base de tu backend
 const API_URL = "http://localhost:4000/api";
 // ENDPOINT de ventas (ajusta a '/venta' si tu backend usa singular)
-const SALES_ENDPOINT = `${API_URL}/ventas`;
+const SALES_ENDPOINT = `${API_URL}/venta`;
 
 // Elementos del DOM
 const loginSection = document.getElementById("login-section");
