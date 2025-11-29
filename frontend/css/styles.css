@@ -181,7 +181,17 @@ body {
   border-radius: 0.9rem;
   border: 1px solid #e5e7eb;
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.45);
+  color: #111827;           /* 🔹 Texto negro dentro del panel */
 }
+
+/* Aseguramos también subtítulos y labels en oscuro */
+.dropdown-panel h3,
+.dropdown-panel .subtitle,
+.dropdown-panel label,
+.dropdown-panel p {
+  color: #111827;
+}
+
 
 /* Mostrar dropdown con hover o clase .is-open */
 .dropdown:hover .dropdown-panel,
