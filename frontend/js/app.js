@@ -614,4 +614,3 @@ if (productosTableBody) {
 
 // --- Iniciar al cargar la página ---
 document.addEventListener("DOMContentLoaded", initFromSession);
-
