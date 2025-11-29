@@ -702,10 +702,11 @@ body {
 .store-main {
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-  max-width: 1280px;
+  gap: 1.75rem;
+  max-width: 1400px;   /* 🔹 más ancho */
   margin-inline: auto;
 }
+
 
 /* Hero de la tienda */
 .store-hero {
@@ -885,16 +886,16 @@ body {
 
 .store-category-strip {
   width: 100%;
-  margin-top: 1.25rem;
+  margin-top: 0.5rem;
 }
 
 .category-scroll {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(140px, 1fr);
-  gap: 0.75rem;
+  grid-auto-columns: minmax(260px, 1fr); /* 🔹 más ancho cada banner */
+  gap: 1rem;
   overflow-x: auto;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
 }
 
 .category-scroll::-webkit-scrollbar {
@@ -912,9 +913,9 @@ body {
 
 .category-banner {
   position: relative;
-  border-radius: 0.85rem;
+  border-radius: 0.9rem;
   overflow: hidden;
-  min-height: 130px;
+  min-height: 230px;              /* 🔹 más alto */
   background: #e5e7eb;
 }
 
@@ -927,15 +928,16 @@ body {
 
 .category-banner-label {
   position: absolute;
-  left: 0.75rem;
-  bottom: 0.6rem;
-  padding: 0.25rem 0.7rem;
-  font-size: 0.8rem;
-  background: rgba(255, 255, 255, 0.9);
+  left: 0.9rem;
+  bottom: 0.75rem;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.95);
   color: #111827;
   border-radius: 999px;
-  font-weight: 500;
+  font-weight: 600;
 }
+
 
 /* ===========================
    Barra de categorías + filtros
