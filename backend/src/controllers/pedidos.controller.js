@@ -78,18 +78,19 @@ exports.crearPedido = async (req, res) => {
 
     // Crear el pedido
     const pedidoResult = await client.query(
-      `INSERT INTO pedido (
-         id_cliente,
-         fecha_hora,
-         total,
-         metodo_pago,
-         direccion_envio,
-         estado
-       )
-       VALUES ($1, NOW(), $2, $3, $4, $5)
-       RETURNING id_pedido, id_cliente, fecha_hora, total, metodo_pago, direccion_envio, estado`,
-      [id_cliente, total, metodo_pago || null, direccion_envio || null, "Pendiente"]
-    );
+  `INSERT INTO pedido (
+     id_cliente,
+     fecha_hora,
+     total,
+     metodo_pago,
+     direccion_envio,
+     estado_pedido
+   )
+   VALUES ($1, NOW(), $2, $3, $4, $5)
+   RETURNING id_pedido, id_cliente, fecha_hora, total, metodo_pago, direccion_envio, estado_pedido`,
+  [id_cliente, total, metodo_pago || null, direccion_envio || null, "Pendiente"]
+);
+
 
     const pedido = pedidoResult.rows[0];
 
