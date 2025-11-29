@@ -227,7 +227,10 @@
     <!-- Tira de colecciones GRANDE -->
     <section class="store-category-strip">
       <div class="category-scroll">
-        <article class="category-banner">
+        <article
+          class="category-banner js-category-filter"
+          data-category="Camisetas"
+        >
           <img
             src="https://via.placeholder.com/900x600?text=Camisetas"
             alt="Camisetas"
@@ -235,7 +238,10 @@
           <span class="category-banner-label">Camisetas</span>
         </article>
 
-        <article class="category-banner">
+        <article
+          class="category-banner js-category-filter"
+          data-category="Camisas"
+        >
           <img
             src="https://via.placeholder.com/900x600?text=Camisas"
             alt="Camisas"
@@ -243,7 +249,10 @@
           <span class="category-banner-label">Camisas</span>
         </article>
 
-        <article class="category-banner">
+        <article
+          class="category-banner js-category-filter"
+          data-category="Jeans"
+        >
           <img
             src="https://via.placeholder.com/900x600?text=Jeans"
             alt="Jeans"
@@ -251,7 +260,10 @@
           <span class="category-banner-label">Jeans</span>
         </article>
 
-        <article class="category-banner">
+        <article
+          class="category-banner js-category-filter"
+          data-category="Chaquetas"
+        >
           <img
             src="https://via.placeholder.com/900x600?text=Chaquetas"
             alt="Chaquetas"
@@ -259,7 +271,10 @@
           <span class="category-banner-label">Chaquetas</span>
         </article>
 
-        <article class="category-banner">
+        <article
+          class="category-banner js-category-filter"
+          data-category="Chalecos"
+        >
           <img
             src="https://via.placeholder.com/900x600?text=Chalecos"
             alt="Chalecos"
@@ -267,7 +282,10 @@
           <span class="category-banner-label">Chalecos</span>
         </article>
 
-        <article class="category-banner">
+        <article
+          class="category-banner js-category-filter"
+          data-category="Faldas"
+        >
           <img
             src="https://via.placeholder.com/900x600?text=Faldas"
             alt="Faldas"
@@ -296,21 +314,50 @@
 
       <!-- Barra tipo "ORDENAR POR / categorías / Filtros" -->
       <div class="catalog-toolbar">
-        <button type="button" class="btn btn-outline catalog-sort-btn">
+        <button
+          type="button"
+          class="btn btn-outline catalog-sort-btn"
+        >
           ORDENAR POR
         </button>
 
         <div class="catalog-tabs">
-          <button class="catalog-tab catalog-tab-active">New Arrivals</button>
-          <button class="catalog-tab">Básicos</button>
-          <button class="catalog-tab">Camisetas</button>
-          <button class="catalog-tab">Camisas</button>
-          <button class="catalog-tab">Pantalones</button>
-          <button class="catalog-tab">Jeans</button>
-          <button class="catalog-tab">Chaquetas y Chalecos</button>
-          <button class="catalog-tab">Shorts</button>
-          <button class="catalog-tab">Vestidos</button>
-          <button class="catalog-tab">Faldas</button>
+          <button
+            class="catalog-tab catalog-tab-active"
+            data-category="all"
+          >
+            New Arrivals
+          </button>
+          <button class="catalog-tab" data-category="Básicos">
+            Básicos
+          </button>
+          <button class="catalog-tab" data-category="Camisetas">
+            Camisetas
+          </button>
+          <button class="catalog-tab" data-category="Camisas">
+            Camisas
+          </button>
+          <button class="catalog-tab" data-category="Pantalones">
+            Pantalones
+          </button>
+          <button class="catalog-tab" data-category="Jeans">
+            Jeans
+          </button>
+          <button
+            class="catalog-tab"
+            data-category="Chaquetas y Chalecos"
+          >
+            Chaquetas y Chalecos
+          </button>
+          <button class="catalog-tab" data-category="Shorts">
+            Shorts
+          </button>
+          <button class="catalog-tab" data-category="Vestidos">
+            Vestidos
+          </button>
+          <button class="catalog-tab" data-category="Faldas">
+            Faldas
+          </button>
         </div>
 
         <button type="button" class="catalog-filters-btn">
@@ -335,6 +382,4 @@
   <script src="js/tienda.js"></script>
 </body>
 </html>
-
-
 

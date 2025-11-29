@@ -6,6 +6,9 @@ const API_URL = "http://localhost:4000/api";
 const catalogGrid = document.getElementById("catalog-grid");
 const catalogMessage = document.getElementById("catalog-message");
 const catalogCountSpan = document.getElementById("catalog-count");
+const catalogSection = document.getElementById("catalogo");
+const catalogTabs = document.querySelectorAll(".catalog-tab");
+const categoryBanners = document.querySelectorAll(".js-category-filter");
 
 // DOM cuenta cliente
 const clientStatus = document.getElementById("client-status");
@@ -15,25 +18,61 @@ const clientLoginForm = document.getElementById("client-login-form");
 const clientRegisterForm = document.getElementById("client-register-form");
 const clientLogoutBtn = document.getElementById("client-logout-btn");
 const clientLoginMessage = document.getElementById("client-login-message");
-const clientRegisterMessage = document.getElementById("client-register-message");
+const clientRegisterMessage = document.getElementById(
+  "client-register-message"
+);
 
 // DOM carrito / pedido
 const cartBody = document.getElementById("cart-body");
 const cartCountSpan = document.getElementById("cart-count");
+const cartCountBadge = document.getElementById("cart-count-badge");
 const cartTotalSpan = document.getElementById("cart-total");
 const orderForm = document.getElementById("order-form");
 const orderAddressInput = document.getElementById("order-address");
 const orderPaymentSelect = document.getElementById("order-payment");
 const orderMessage = document.getElementById("order-message");
 
-// 🔹 Nuevo: badge pequeño en el icono del carrito
-const cartCountBadge = document.getElementById("cart-count-badge");
-
 // Estado global
 let allProducts = [];
 let allVariants = [];
 let cart = [];
 let clientSession = null;
+let currentCategoryFilter = "all";
+
+// --- Helpers generales ---
+
+function normalizeText(str) {
+  return String(str || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function productMatchesCategory(product, categoryFilter) {
+  if (!categoryFilter || categoryFilter === "all") return true;
+
+  const filterNorm = normalizeText(categoryFilter);
+  const catNorm = normalizeText(product.categoria);
+  const nameNorm = normalizeText(product.nombre);
+
+  // Caso especial: "Chaquetas y Chalecos"
+  if (filterNorm === "chaquetas y chalecos") {
+    return (
+      catNorm.includes("chaqueta") ||
+      catNorm.includes("chaleco") ||
+      nameNorm.includes("chaqueta") ||
+      nameNorm.includes("chaleco")
+    );
+  }
+
+  // Caso "Básicos"
+  if (filterNorm === "basicos") {
+    return catNorm.includes("basico") || nameNorm.includes("basico");
+  }
+
+  // Genérico: buscar la palabra en categoría o nombre
+  return catNorm.includes(filterNorm) || nameNorm.includes(filterNorm);
+}
 
 // --- Helpers de sesión cliente ---
 
@@ -99,8 +138,9 @@ function renderCart() {
   if (cart.length === 0) {
     cartBody.innerHTML = "";
     cartCountSpan.textContent = "0";
-    cartTotalSpan.textContent = "0.00";
     if (cartCountBadge) cartCountBadge.textContent = "0";
+    cartTotalSpan.textContent = "0.00";
+    saveCart();
     return;
   }
 
@@ -126,9 +166,7 @@ function renderCart() {
 
   cartBody.innerHTML = rowsHtml;
   cartCountSpan.textContent = String(cart.length);
-  if (cartCountBadge) {
-    cartCountBadge.textContent = String(cart.length);
-  }
+  if (cartCountBadge) cartCountBadge.textContent = String(cart.length);
   cartTotalSpan.textContent = total.toFixed(2);
 
   saveCart();
@@ -164,6 +202,7 @@ btnTabRegister.addEventListener("click", () => switchAuthTab("register"));
 
 async function loadCatalog() {
   catalogMessage.textContent = "";
+  catalogMessage.classList.remove("error", "success");
   catalogGrid.innerHTML = "<p>Cargando catálogo...</p>";
 
   try {
@@ -186,10 +225,14 @@ async function loadCatalog() {
       "Error al cargar el catálogo. Verifica que el backend esté activo.";
     catalogMessage.classList.add("error");
     catalogGrid.innerHTML = "";
+    if (catalogCountSpan) catalogCountSpan.textContent = "0 productos";
   }
 }
 
 function renderCatalog() {
+  catalogMessage.textContent = "";
+  catalogMessage.classList.remove("error", "success");
+
   if (!Array.isArray(allProducts) || allProducts.length === 0) {
     catalogGrid.innerHTML = "";
     catalogMessage.textContent = "No hay productos disponibles.";
@@ -210,8 +253,13 @@ function renderCatalog() {
           (v.stock == null || v.stock > 0)
       );
 
-      // Solo mostrar productos con stock disponible
+      // Solo productos con stock
       if (variantsForProduct.length === 0) {
+        return "";
+      }
+
+      // Filtro por categoría
+      if (!productMatchesCategory(p, currentCategoryFilter)) {
         return "";
       }
 
@@ -281,16 +329,57 @@ function renderCatalog() {
     })
     .join("");
 
-  catalogGrid.innerHTML = cardsHtml || "";
-  if (catalogCountSpan) {
-    const label =
-      visibleCount === 1
-        ? "1 producto"
-        : `${visibleCount} productos`;
-    catalogCountSpan.textContent = label;
+  if (visibleCount === 0) {
+    catalogGrid.innerHTML = "";
+    catalogMessage.textContent =
+      "No se encontraron productos para este filtro.";
+    if (catalogCountSpan) catalogCountSpan.textContent = "0 productos";
+  } else {
+    catalogGrid.innerHTML = cardsHtml || "";
+    if (catalogCountSpan) {
+      const label =
+        visibleCount === 1 ? "1 producto" : `${visibleCount} productos`;
+      catalogCountSpan.textContent = label;
+    }
   }
 }
 
+// --- Filtros de categoría (tabs + banners) ---
+
+function setActiveTab(category) {
+  catalogTabs.forEach((tab) => {
+    const tabCat = tab.dataset.category || "all";
+    if (tabCat === category) {
+      tab.classList.add("catalog-tab-active");
+    } else {
+      tab.classList.remove("catalog-tab-active");
+    }
+  });
+}
+
+catalogTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    const category = tab.dataset.category || "all";
+    currentCategoryFilter = category;
+    setActiveTab(category);
+    renderCatalog();
+    if (catalogSection) {
+      catalogSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+});
+
+categoryBanners.forEach((banner) => {
+  banner.addEventListener("click", () => {
+    const category = banner.dataset.category || "all";
+    currentCategoryFilter = category;
+    setActiveTab(category);
+    renderCatalog();
+    if (catalogSection) {
+      catalogSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+});
 
 // --- Manejo de clicks en el catálogo (agregar al carrito) ---
 
@@ -437,7 +526,7 @@ clientLoginForm.addEventListener("submit", async (e) => {
       const payloadJson = atob(payloadBase64);
       const payload = JSON.parse(payloadJson);
       nombre = payload.nombre_completo || nombre;
-    } catch (e) {
+    } catch (e2) {
       // ignorar
     }
 
@@ -598,27 +687,5 @@ document.addEventListener("DOMContentLoaded", () => {
   loadClientSession();
   loadCart();
   loadCatalog();
-
-  // 🔹 Dropdowns (abrir/cerrar con click)
-  const dropdownToggles = document.querySelectorAll(".dropdown-toggle");
-
-  dropdownToggles.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      const parent = btn.closest(".dropdown");
-      if (!parent) return;
-      parent.classList.toggle("is-open");
-    });
-  });
-
-  // Cerrar dropdowns al hacer click fuera
-  document.addEventListener("click", (e) => {
-    dropdownToggles.forEach((btn) => {
-      const parent = btn.closest(".dropdown");
-      if (!parent) return;
-      if (!parent.contains(e.target)) {
-        parent.classList.remove("is-open");
-      }
-    });
-  });
 });
+
