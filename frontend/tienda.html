@@ -382,6 +382,88 @@
     </section>
   </main>
 
+  <!-- Modal de recibo E-commerce -->
+  <div id="ecom-receipt-modal" class="receipt-modal hidden">
+    <div class="receipt-modal-content">
+      <div id="ecom-receipt-panel" class="receipt-panel">
+        <div class="receipt-header">
+          <div>
+            <h4>Recibo de compra</h4>
+            <p class="subtitle">
+              Comprobante generado automáticamente después de tu pedido.
+            </p>
+          </div>
+          <div class="receipt-header-actions">
+            <button
+              id="ecom-receipt-close-btn"
+              class="btn btn-outline btn-small"
+              type="button"
+            >
+              Cerrar
+            </button>
+            <button
+              id="ecom-receipt-print-btn"
+              class="btn btn-secondary btn-small"
+              type="button"
+            >
+              Imprimir
+            </button>
+          </div>
+        </div>
+
+        <div class="receipt-body">
+          <!-- Encabezado de la tienda -->
+          <div class="receipt-store-header">
+            <h3>Moda Boutique Panamá</h3>
+            <p>RUC: 8-100-2025  DV 01</p>
+            <p>Dirección: Calle Principal, Ciudad de Panamá, Panamá</p>
+            <p>Tel: (507) 6000-2025 · Instagram: @modaboutique.pa</p>
+          </div>
+
+          <!-- Datos de la venta -->
+          <div class="receipt-meta">
+            <p><strong>N.º de pedido:</strong> <span id="ecom-receipt-id">-</span></p>
+            <p><strong>Fecha:</strong> <span id="ecom-receipt-date">-</span></p>
+            <p><strong>Cliente:</strong> <span id="ecom-receipt-customer">-</span></p>
+            <p><strong>Método de pago:</strong> <span id="ecom-receipt-payment">-</span></p>
+          </div>
+
+          <!-- Detalle de items -->
+          <div class="table-wrapper">
+            <table class="table receipt-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Talla</th>
+                  <th>Color</th>
+                  <th>Cant.</th>
+                  <th>Precio</th>
+                  <th>Subtotal</th>
+                </tr>
+              </thead>
+              <tbody id="ecom-receipt-items-body">
+                <!-- Items del recibo -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="receipt-total-row">
+            <p>
+              <strong>Total:</strong>
+              B/. <span id="ecom-receipt-total">0.00</span>
+            </p>
+          </div>
+
+          <!-- Texto fijo al final del recibo -->
+          <div class="receipt-footer-note">
+            <p>¡Gracias por tu compra!</p>
+            <p>Cambios solo con recibo físico dentro de 30 días.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer class="main-footer">
     <p>Moda Boutique Panamá &copy; 2025 - Tienda en línea</p>
   </footer>

@@ -32,6 +32,21 @@ const orderAddressInput = document.getElementById("order-address");
 const orderPaymentSelect = document.getElementById("order-payment");
 const orderMessage = document.getElementById("order-message");
 
+// --- DOM Recibo e-commerce ---
+const ecomReceiptModal = document.getElementById("ecom-receipt-modal");
+const ecomReceiptIdSpan = document.getElementById("ecom-receipt-id");
+const ecomReceiptDateSpan = document.getElementById("ecom-receipt-date");
+const ecomReceiptCustomerSpan = document.getElementById("ecom-receipt-customer");
+const ecomReceiptPaymentSpan = document.getElementById("ecom-receipt-payment");
+const ecomReceiptItemsBody = document.getElementById("ecom-receipt-items-body");
+const ecomReceiptTotalSpan = document.getElementById("ecom-receipt-total");
+const ecomReceiptPrintBtn = document.getElementById("ecom-receipt-print-btn");
+const ecomReceiptCloseBtn = document.getElementById("ecom-receipt-close-btn");
+
+// Estado del recibo
+let lastEcomReceipt = null;
+
+
 // Estado global
 let allProducts = [];
 let allVariants = [];
@@ -671,6 +686,65 @@ clientLogoutBtn.addEventListener("click", () => {
   clearClientSession();
 });
 
+function openEcomReceiptModal() {
+  if (ecomReceiptModal) {
+    ecomReceiptModal.classList.remove("hidden");
+  }
+}
+
+function closeEcomReceiptModal() {
+  if (ecomReceiptModal) {
+    ecomReceiptModal.classList.add("hidden");
+  }
+}
+
+function renderEcomReceipt() {
+  if (!lastEcomReceipt) return;
+
+  const r = lastEcomReceipt;
+
+  ecomReceiptIdSpan.textContent = r.id_pedido || "N/D";
+  ecomReceiptDateSpan.textContent = r.fecha || "-";
+  ecomReceiptCustomerSpan.textContent = r.cliente || "Cliente";
+  ecomReceiptPaymentSpan.textContent = r.metodo_pago || "-";
+  ecomReceiptTotalSpan.textContent = r.total.toFixed(2);
+
+  const rows = r.items
+    .map((item) => {
+      const subtotal = item.cantidad * item.precio;
+      return `
+        <tr>
+          <td>${item.producto}</td>
+          <td>${item.talla}</td>
+          <td>${item.color}</td>
+          <td>${item.cantidad}</td>
+          <td>${item.precio.toFixed(2)}</td>
+          <td>${subtotal.toFixed(2)}</td>
+        </tr>
+      `;
+    })
+    .join("");
+
+  ecomReceiptItemsBody.innerHTML = rows;
+
+  openEcomReceiptModal();
+}
+
+// Eventos de los botones del modal
+if (ecomReceiptCloseBtn) {
+  ecomReceiptCloseBtn.addEventListener("click", () => {
+    closeEcomReceiptModal();
+  });
+}
+
+if (ecomReceiptPrintBtn) {
+  ecomReceiptPrintBtn.addEventListener("click", () => {
+    window.print();
+  });
+}
+
+
+
 // --- Realizar pedido (RF-4.4) ---
 
 orderForm.addEventListener("submit", async (e) => {
@@ -700,7 +774,14 @@ orderForm.addEventListener("submit", async (e) => {
     return;
   }
 
-  const items = cart.map((item) => ({
+  // Hacemos una copia del carrito antes de limpiarlo, para el recibo
+  const cartSnapshot = cart.map((item) => ({ ...item }));
+  const total = cartSnapshot.reduce(
+    (sum, i) => sum + i.precio * i.cantidad,
+    0
+  );
+
+  const items = cartSnapshot.map((item) => ({
     id_variante: item.id_variante,
     cantidad: item.cantidad,
   }));
@@ -729,6 +810,27 @@ orderForm.addEventListener("submit", async (e) => {
     const data = await response.json();
     console.log("Pedido registrado:", data);
 
+    const nowStr = new Date().toLocaleString("es-PA");
+    const orderId =
+      data.id_pedido ||
+      data.id ||
+      data.idPedido ||
+      data.id_pedido_pk ||
+      null;
+    const fechaPedido = data.fecha || data.fecha_pedido || nowStr;
+
+    // Guardamos los datos del recibo para mostrar en el modal
+    lastEcomReceipt = {
+      id_pedido: orderId,
+      fecha: fechaPedido,
+      cliente: clientSession?.nombre || clientSession?.email || "Cliente",
+      metodo_pago,
+      total,
+      items: cartSnapshot,
+    };
+
+    renderEcomReceipt();
+
     orderMessage.textContent =
       "Pedido registrado correctamente. ¡Gracias por tu compra!";
     orderMessage.classList.add("success");
@@ -747,6 +849,7 @@ orderForm.addEventListener("submit", async (e) => {
     orderMessage.classList.add("error");
   }
 });
+
 
 // --- Inicio ---
 

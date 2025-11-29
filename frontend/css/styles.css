@@ -1041,3 +1041,33 @@ body {
     align-self: flex-end;
   }
 }
+
+/* Modal de recibo E-commerce */
+.receipt-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.receipt-modal-content {
+  width: 100%;
+  max-width: 520px;
+  padding: 0 1rem;
+}
+
+.receipt-header-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* Ajuste para imprimir solo el recibo del modal */
+@media print {
+  .receipt-modal {
+    position: static;
+    background: transparent;
+  }
+}
