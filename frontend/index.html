@@ -30,7 +30,7 @@
             type="text"
             id="username"
             name="username"
-            placeholder="Ej: admin"
+            placeholder="Ej: Admin"
             required
           />
         </div>
@@ -65,7 +65,7 @@
           <button class="btn btn-secondary btn-block" data-view="productos">
             🧾 Ver productos
           </button>
-          <!-- Más botones a futuro:
+          <!-- Próximamente:
           <button class="btn btn-secondary btn-block" data-view="pos">
             🛒 Punto de venta
           </button>
@@ -87,6 +87,76 @@
         </header>
 
         <div id="view-productos" class="view active-view">
+          <!-- Panel de administración de productos (solo Admin) -->
+          <div id="product-admin-panel" class="product-admin-panel hidden">
+            <h3>Registrar nuevo producto</h3>
+            <p class="subtitle">
+              Completa los datos básicos del producto. Más adelante podrás agregar variantes (tallas, colores y stock).
+            </p>
+
+            <form id="product-form" class="form form-horizontal">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="product-name">Nombre *</label>
+                  <input
+                    type="text"
+                    id="product-name"
+                    placeholder="Ej: Blusa de lino"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="product-brand">Marca</label>
+                  <input
+                    type="text"
+                    id="product-brand"
+                    placeholder="Ej: Moda Boutique"
+                  />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="product-category">Categoría</label>
+                  <input
+                    type="text"
+                    id="product-category"
+                    placeholder="Ej: Blusas, Pantalones..."
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="product-image">URL de imagen</label>
+                  <input
+                    type="text"
+                    id="product-image"
+                    placeholder="https://ejemplo.com/imagen.jpg"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="product-description">Descripción</label>
+                <textarea
+                  id="product-description"
+                  rows="2"
+                  placeholder="Describe brevemente el producto..."
+                ></textarea>
+              </div>
+
+              <div class="form-row form-row-end">
+                <p id="product-form-message" class="form-message"></p>
+                <button type="submit" class="btn btn-primary">
+                  ➕ Guardar producto
+                </button>
+              </div>
+            </form>
+
+            <hr class="section-divider" />
+          </div>
+
+          <!-- Listado de productos -->
           <div class="table-toolbar">
             <h3>Listado de productos</h3>
             <span id="productos-count" class="badge-info">0 productos</span>
@@ -102,6 +172,7 @@
                   <th>Categoría</th>
                   <th>Descripción</th>
                   <th>Imagen</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody id="productos-table-body">
@@ -111,12 +182,116 @@
           </div>
 
           <p id="productos-message" class="form-message"></p>
-        </div>
 
-        <!-- Aquí luego podemos agregar otras vistas:
-        <div id="view-pos" class="view">...</div>
-        <div id="view-admin" class="view">...</div>
-        -->
+          <!-- Panel de variantes para el producto seleccionado -->
+          <div id="variants-panel" class="variants-panel hidden">
+            <div class="variants-header">
+              <div>
+                <h3>Variantes del producto</h3>
+                <p class="subtitle">
+                  Gestiona tallas, colores, precio y stock para:
+                  <strong id="variants-product-name">-</strong>
+                </p>
+              </div>
+              <button id="variants-close-btn" class="btn btn-outline btn-small">
+                Cerrar
+              </button>
+            </div>
+
+            <form id="variant-form" class="form form-horizontal">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="variant-size">Talla *</label>
+                  <input
+                    type="text"
+                    id="variant-size"
+                    placeholder="Ej: S, M, L, XL"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="variant-color">Color *</label>
+                  <input
+                    type="text"
+                    id="variant-color"
+                    placeholder="Ej: Blanco, Negro"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="variant-sku">SKU *</label>
+                  <input
+                    type="text"
+                    id="variant-sku"
+                    placeholder="Código único de la variante"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="variant-price">Precio *</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    id="variant-price"
+                    placeholder="Ej: 29.99"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="variant-stock">Stock *</label>
+                  <input
+                    type="number"
+                    min="0"
+                    id="variant-stock"
+                    placeholder="Cantidad en inventario"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="form-row form-row-end">
+                <p id="variant-form-message" class="form-message"></p>
+                <button type="submit" class="btn btn-primary">
+                  ➕ Agregar variante
+                </button>
+              </div>
+            </form>
+
+            <div class="table-toolbar mt-2">
+              <h4>Listado de variantes</h4>
+              <span id="variants-count" class="badge-info">0 variantes</span>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Talla</th>
+                    <th>Color</th>
+                    <th>SKU</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                  </tr>
+                </thead>
+                <tbody id="variants-table-body">
+                  <!-- Se llena desde app.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <p id="variants-message" class="form-message"></p>
+          </div>
+        </div>
       </section>
     </section>
   </main>
@@ -128,3 +303,5 @@
   <script src="js/app.js"></script>
 </body>
 </html>
+
+
