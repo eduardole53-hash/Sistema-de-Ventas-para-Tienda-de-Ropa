@@ -99,7 +99,8 @@ body {
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
   padding: 0.6rem 0.75rem;
   border-radius: 0.5rem;
   border: 1px solid #d1d5db;
@@ -108,7 +109,8 @@ body {
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
   outline: none;
   border-color: #f97316;
   box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.4);
@@ -334,6 +336,46 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.75rem;
+}
+
+/* POS */
+.pos-header h3 {
+  margin-bottom: 0.25rem;
+}
+
+.pos-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.pos-column {
+  background: #f9fafb;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  padding: 1rem 1.25rem;
+}
+
+.pos-summary {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.pos-summary-right {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.pos-summary-right .btn {
+  grid-column: span 2;
 }
 
 /* Utilidades */

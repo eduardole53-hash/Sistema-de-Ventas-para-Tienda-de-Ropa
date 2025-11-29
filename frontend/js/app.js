@@ -1,5 +1,7 @@
 // URL base de tu backend
 const API_URL = "http://localhost:4000/api";
+// ENDPOINT de ventas (ajusta a '/venta' si tu backend usa singular)
+const SALES_ENDPOINT = `${API_URL}/ventas`;
 
 // Elementos del DOM
 const loginSection = document.getElementById("login-section");
@@ -11,16 +13,19 @@ const userNameSpan = document.getElementById("user-name");
 const userRoleSpan = document.getElementById("user-role");
 const logoutBtn = document.getElementById("logout-btn");
 
+const contentTitle = document.getElementById("content-title");
+const views = document.querySelectorAll(".view");
+const viewButtons = document.querySelectorAll("[data-view]");
+
+// Productos / variantes
 const productosTableBody = document.getElementById("productos-table-body");
 const productosCountSpan = document.getElementById("productos-count");
 const productosMessage = document.getElementById("productos-message");
 
-// Panel de admin de productos
 const productAdminPanel = document.getElementById("product-admin-panel");
 const productForm = document.getElementById("product-form");
 const productFormMessage = document.getElementById("product-form-message");
 
-// Panel de variantes
 const variantsPanel = document.getElementById("variants-panel");
 const variantsProductNameSpan = document.getElementById(
   "variants-product-name"
@@ -32,8 +37,30 @@ const variantsCloseBtn = document.getElementById("variants-close-btn");
 const variantForm = document.getElementById("variant-form");
 const variantFormMessage = document.getElementById("variant-form-message");
 
-// Producto actualmente seleccionado para gestionar variantes
+// POS
+const posView = document.getElementById("view-pos");
+const posItemForm = document.getElementById("pos-item-form");
+const posProductSelect = document.getElementById("pos-product-select");
+const posVariantSelect = document.getElementById("pos-variant-select");
+const posQuantityInput = document.getElementById("pos-quantity");
+const posUnitPriceInput = document.getElementById("pos-unit-price");
+const posStockInfo = document.getElementById("pos-stock-info");
+const posItemMessage = document.getElementById("pos-item-message");
+
+const posCartBody = document.getElementById("pos-cart-body");
+const posCartMessage = document.getElementById("pos-cart-message");
+const posCartCountSpan = document.getElementById("pos-cart-count");
+const posCartTotalSpan = document.getElementById("pos-cart-total");
+const posCustomerInput = document.getElementById("pos-customer-name");
+const posPaymentSelect = document.getElementById("pos-payment-method");
+const posConfirmBtn = document.getElementById("pos-confirm-btn");
+
+// Estado global
 let currentVariantProduct = null;
+let allProducts = [];
+let allVariants = [];
+let posCart = [];
+let posInitialized = false;
 
 // --- Gestión de sesión con localStorage ---
 
@@ -94,6 +121,29 @@ function showApp(session) {
     productAdminPanel.classList.add("hidden");
   }
 }
+
+// --- Cambio de vistas (Productos / POS) ---
+
+function switchView(target) {
+  views.forEach((v) => {
+    const viewName = v.id.replace("view-", "");
+    v.classList.toggle("active-view", viewName === target);
+  });
+
+  if (target === "productos") {
+    contentTitle.textContent = "Productos";
+  } else if (target === "pos") {
+    contentTitle.textContent = "Punto de venta";
+    initPOS();
+  }
+}
+
+viewButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const target = btn.getAttribute("data-view");
+    switchView(target);
+  });
+});
 
 // --- Manejo de login ---
 
@@ -178,6 +228,7 @@ logoutBtn.addEventListener("click", () => {
   productosMessage.textContent = "";
   productosCountSpan.textContent = "0 productos";
   hideVariantsPanel();
+  resetPOS();
   showLogin();
 });
 
@@ -216,16 +267,17 @@ async function loadProductos(token) {
     }
 
     const productos = await response.json();
+    allProducts = Array.isArray(productos) ? productos : [];
 
-    if (!Array.isArray(productos) || productos.length === 0) {
+    if (allProducts.length === 0) {
       productosMessage.textContent = "No hay productos registrados aún.";
       productosCountSpan.textContent = "0 productos";
       return;
     }
 
-    productosCountSpan.textContent = `${productos.length} productos`;
+    productosCountSpan.textContent = `${allProducts.length} productos`;
 
-    const rowsHtml = productos
+    const rowsHtml = allProducts
       .map((p) => {
         const safeName = String(p.nombre || "").replace(/"/g, "&quot;");
         return `
@@ -359,7 +411,6 @@ if (productForm) {
 
 // === VARIANTES ===
 
-// Mostrar panel de variantes para un producto
 function showVariantsPanel(product) {
   currentVariantProduct = product;
 
@@ -372,7 +423,6 @@ function showVariantsPanel(product) {
   loadVariantsForCurrentProduct();
 }
 
-// Ocultar panel de variantes
 function hideVariantsPanel() {
   currentVariantProduct = null;
   if (variantsPanel) {
@@ -395,7 +445,6 @@ function hideVariantsPanel() {
   }
 }
 
-// Cargar variantes desde el backend y filtrar por producto actual
 async function loadVariantsForCurrentProduct() {
   if (!currentVariantProduct) return;
 
@@ -434,14 +483,12 @@ async function loadVariantsForCurrentProduct() {
     }
 
     const variantes = await response.json();
+    allVariants = Array.isArray(variantes) ? variantes : [];
 
-    const filtered = Array.isArray(variantes)
-      ? variantes.filter(
-          (v) =>
-            Number(v.id_producto) ===
-            Number(currentVariantProduct.id_producto)
-        )
-      : [];
+    const filtered = allVariants.filter(
+      (v) =>
+        Number(v.id_producto) === Number(currentVariantProduct.id_producto)
+    );
 
     if (filtered.length === 0) {
       variantsMessage.textContent =
@@ -477,7 +524,6 @@ async function loadVariantsForCurrentProduct() {
   }
 }
 
-// Crear variante para el producto actual
 async function createVariantForCurrentProduct(formData) {
   const session = loadSession();
   if (!session || !session.token) {
@@ -539,7 +585,6 @@ async function createVariantForCurrentProduct(formData) {
   }
 }
 
-// Listener del formulario de variantes
 if (variantForm) {
   variantForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -587,14 +632,12 @@ if (variantForm) {
   });
 }
 
-// Listener para el botón cerrar de variantes
 if (variantsCloseBtn) {
   variantsCloseBtn.addEventListener("click", () => {
     hideVariantsPanel();
   });
 }
 
-// Delegación de eventos en la tabla de productos para botón Variantes
 if (productosTableBody) {
   productosTableBody.addEventListener("click", (e) => {
     const btn = e.target.closest(".btn-variants");
@@ -612,6 +655,391 @@ if (productosTableBody) {
   });
 }
 
+// === POS ===
+
+function resetPOS() {
+  posCart = [];
+  posCartBody.innerHTML = "";
+  posCartMessage.textContent = "";
+  posCartCountSpan.textContent = "0";
+  posCartTotalSpan.textContent = "0.00";
+  posCustomerInput.value = "";
+  posPaymentSelect.value = "";
+  posItemMessage.textContent = "";
+  posItemMessage.classList.remove("error", "success");
+  posStockInfo.textContent = "";
+  posStockInfo.classList.remove("error", "success");
+  if (posProductSelect) {
+    posProductSelect.innerHTML =
+      '<option value="">Selecciona un producto...</option>';
+  }
+  if (posVariantSelect) {
+    posVariantSelect.innerHTML =
+      '<option value="">Selecciona primero un producto...</option>';
+    posVariantSelect.disabled = true;
+  }
+  posQuantityInput.value = "1";
+  posUnitPriceInput.value = "";
+  posInitialized = false;
+}
+
+async function initPOS() {
+  if (posInitialized) return;
+
+  const session = loadSession();
+  if (!session || !session.token) {
+    posItemMessage.textContent =
+      "Sesión no válida. Vuelve a iniciar sesión.";
+    posItemMessage.classList.add("error");
+    return;
+  }
+
+  posItemMessage.textContent = "";
+  posItemMessage.classList.remove("error", "success");
+  posStockInfo.textContent = "";
+
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session.token}`,
+    };
+
+    const [prodRes, varRes] = await Promise.all([
+      fetch(`${API_URL}/productos`, { headers }),
+      fetch(`${API_URL}/variantes`, { headers }),
+    ]);
+
+    if (!prodRes.ok) {
+      throw new Error("Error al cargar productos para POS.");
+    }
+    if (!varRes.ok) {
+      throw new Error("Error al cargar variantes para POS.");
+    }
+
+    const productos = await prodRes.json();
+    const variantes = await varRes.json();
+
+    allProducts = Array.isArray(productos) ? productos : [];
+    allVariants = Array.isArray(variantes) ? variantes : [];
+
+    // Llenar select de productos
+    posProductSelect.innerHTML =
+      '<option value="">Selecciona un producto...</option>';
+
+    allProducts.forEach((p) => {
+      const opt = document.createElement("option");
+      opt.value = p.id_producto;
+      opt.textContent = `${p.nombre} (${p.categoria || "Sin categoría"})`;
+      posProductSelect.appendChild(opt);
+    });
+
+    posVariantSelect.innerHTML =
+      '<option value="">Selecciona primero un producto...</option>';
+    posVariantSelect.disabled = true;
+
+    posInitialized = true;
+  } catch (error) {
+    console.error("Error inicializando POS:", error);
+    posItemMessage.textContent =
+      "No se pudieron cargar los datos para el POS.";
+    posItemMessage.classList.add("error");
+  }
+}
+
+function getVariantById(idVariante) {
+  return allVariants.find(
+    (v) => Number(v.id_variante) === Number(idVariante)
+  );
+}
+
+function updateVariantOptionsForProduct(productId) {
+  posVariantSelect.innerHTML = "";
+  posVariantSelect.disabled = true;
+  posUnitPriceInput.value = "";
+  posStockInfo.textContent = "";
+
+  const variantsForProduct = allVariants.filter(
+    (v) => Number(v.id_producto) === Number(productId)
+  );
+
+  if (variantsForProduct.length === 0) {
+    posVariantSelect.innerHTML =
+      '<option value="">Este producto no tiene variantes.</option>';
+    return;
+  }
+
+  posVariantSelect.disabled = false;
+  posVariantSelect.innerHTML =
+    '<option value="">Selecciona una variante...</option>';
+
+  variantsForProduct.forEach((v) => {
+    const opt = document.createElement("option");
+    opt.value = v.id_variante;
+    const precioStr =
+      v.precio != null ? `B/. ${Number(v.precio).toFixed(2)}` : "Sin precio";
+    const stockStr =
+      v.stock != null ? `Stock: ${v.stock}` : "Stock: desconocido";
+    opt.textContent = `${v.talla || "-"} / ${v.color || "-"} - ${precioStr} (${stockStr})`;
+    posVariantSelect.appendChild(opt);
+  });
+}
+
+function updatePOSVariantInfo() {
+  const idVariante = posVariantSelect.value;
+  if (!idVariante) {
+    posUnitPriceInput.value = "";
+    posStockInfo.textContent = "";
+    return;
+  }
+
+  const variant = getVariantById(idVariante);
+  if (!variant) return;
+
+  const precio = variant.precio != null ? Number(variant.precio) : 0;
+  const stock = variant.stock != null ? variant.stock : 0;
+
+  posUnitPriceInput.value = `B/. ${precio.toFixed(2)}`;
+  posStockInfo.textContent = `Stock disponible: ${stock} unidades.`;
+  posStockInfo.classList.remove("error", "success");
+}
+
+function getCartQuantityForVariant(idVariante) {
+  return posCart
+    .filter((item) => Number(item.id_variante) === Number(idVariante))
+    .reduce((sum, item) => sum + item.cantidad, 0);
+}
+
+function renderCart() {
+  if (posCart.length === 0) {
+    posCartBody.innerHTML = "";
+    posCartCountSpan.textContent = "0";
+    posCartTotalSpan.textContent = "0.00";
+    return;
+  }
+
+  let total = 0;
+
+  const rowsHtml = posCart
+    .map((item, index) => {
+      const subtotal = item.cantidad * item.precio;
+      total += subtotal;
+      return `
+        <tr data-index="${index}">
+          <td>${item.producto}</td>
+          <td>${item.talla}</td>
+          <td>${item.color}</td>
+          <td>${item.sku}</td>
+          <td>${item.precio.toFixed(2)}</td>
+          <td>${item.cantidad}</td>
+          <td>${subtotal.toFixed(2)}</td>
+          <td>
+            <button class="btn btn-outline btn-small btn-cart-remove">
+              ✕
+            </button>
+          </td>
+        </tr>
+      `;
+    })
+    .join("");
+
+  posCartBody.innerHTML = rowsHtml;
+  posCartCountSpan.textContent = String(posCart.length);
+  posCartTotalSpan.textContent = total.toFixed(2);
+}
+
+if (posProductSelect) {
+  posProductSelect.addEventListener("change", () => {
+    const productId = posProductSelect.value;
+    posItemMessage.textContent = "";
+    posItemMessage.classList.remove("error", "success");
+
+    if (!productId) {
+      posVariantSelect.innerHTML =
+        '<option value="">Selecciona primero un producto...</option>';
+      posVariantSelect.disabled = true;
+      posUnitPriceInput.value = "";
+      posStockInfo.textContent = "";
+      return;
+    }
+
+    updateVariantOptionsForProduct(productId);
+  });
+}
+
+if (posVariantSelect) {
+  posVariantSelect.addEventListener("change", () => {
+    updatePOSVariantInfo();
+  });
+}
+
+if (posItemForm) {
+  posItemForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    posItemMessage.textContent = "";
+    posItemMessage.classList.remove("error", "success");
+
+    const productId = posProductSelect.value;
+    const idVariante = posVariantSelect.value;
+    const quantityStr = posQuantityInput.value.trim();
+
+    if (!productId) {
+      posItemMessage.textContent = "Selecciona un producto.";
+      posItemMessage.classList.add("error");
+      return;
+    }
+    if (!idVariante) {
+      posItemMessage.textContent = "Selecciona una variante.";
+      posItemMessage.classList.add("error");
+      return;
+    }
+
+    const qty = parseInt(quantityStr, 10);
+    if (Number.isNaN(qty) || qty <= 0) {
+      posItemMessage.textContent = "La cantidad no es válida.";
+      posItemMessage.classList.add("error");
+      return;
+    }
+
+    const variant = getVariantById(idVariante);
+    const product = allProducts.find(
+      (p) => Number(p.id_producto) === Number(productId)
+    );
+
+    if (!variant || !product) {
+      posItemMessage.textContent =
+        "No se encontró la información de la variante o producto.";
+      posItemMessage.classList.add("error");
+      return;
+    }
+
+    const availableStock = variant.stock != null ? variant.stock : 0;
+    const alreadyInCart = getCartQuantityForVariant(idVariante);
+
+    if (availableStock > 0 && alreadyInCart + qty > availableStock) {
+      posItemMessage.textContent = `No hay stock suficiente. Stock disponible: ${availableStock}, ya en carrito: ${alreadyInCart}.`;
+      posItemMessage.classList.add("error");
+      return;
+    }
+
+    const price = variant.precio != null ? Number(variant.precio) : 0;
+
+    posCart.push({
+      id_variante: variant.id_variante,
+      producto: product.nombre,
+      talla: variant.talla || "-",
+      color: variant.color || "-",
+      sku: variant.sku || "",
+      precio: price,
+      cantidad: qty,
+    });
+
+    renderCart();
+    posItemMessage.textContent = "Producto agregado al carrito.";
+    posItemMessage.classList.add("success");
+    posQuantityInput.value = "1";
+  });
+}
+
+if (posCartBody) {
+  posCartBody.addEventListener("click", (e) => {
+    const btn = e.target.closest(".btn-cart-remove");
+    if (!btn) return;
+
+    const row = btn.closest("tr");
+    const index = row ? row.getAttribute("data-index") : null;
+    if (index == null) return;
+
+    posCart.splice(Number(index), 1);
+    renderCart();
+  });
+}
+
+if (posConfirmBtn) {
+  posConfirmBtn.addEventListener("click", async () => {
+    posCartMessage.textContent = "";
+    posCartMessage.classList.remove("error", "success");
+
+    if (posCart.length === 0) {
+      posCartMessage.textContent = "El carrito está vacío.";
+      posCartMessage.classList.add("error");
+      return;
+    }
+
+    const metodoPago = posPaymentSelect.value;
+    const cliente = posCustomerInput.value.trim();
+
+    if (!metodoPago) {
+      posCartMessage.textContent = "Selecciona un método de pago.";
+      posCartMessage.classList.add("error");
+      return;
+    }
+
+    const session = loadSession();
+    if (!session || !session.token) {
+      posCartMessage.textContent =
+        "Sesión no válida. Vuelve a iniciar sesión.";
+      posCartMessage.classList.add("error");
+      return;
+    }
+
+    const payload = {
+      metodo_pago: metodoPago,
+      cliente: cliente || null,
+      items: posCart.map((item) => ({
+        id_variante: item.id_variante,
+        cantidad: item.cantidad,
+        precio_unitario: item.precio,
+      })),
+    };
+
+    try {
+      const response = await fetch(SALES_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const msg =
+          errorData.mensaje ||
+          errorData.error ||
+          "No se pudo registrar la venta.";
+        posCartMessage.textContent = msg;
+        posCartMessage.classList.add("error");
+        return;
+      }
+
+      await response.json();
+
+      posCartMessage.textContent = "Venta registrada correctamente.";
+      posCartMessage.classList.add("success");
+
+      // Limpiar carrito y refrescar datos de stock
+      posCart = [];
+      renderCart();
+      posCustomerInput.value = "";
+      posPaymentSelect.value = "";
+
+      // Refrescar productos y variantes para reflejar cambios de stock
+      posInitialized = false;
+      await initPOS();
+      const sessionAgain = loadSession();
+      if (sessionAgain && sessionAgain.token) {
+        loadProductos(sessionAgain.token);
+      }
+    } catch (error) {
+      console.error("Error registrando venta:", error);
+      posCartMessage.textContent =
+        "Error al conectar con el servidor para registrar la venta.";
+      posCartMessage.classList.add("error");
+    }
+  });
+}
+
 // --- Iniciar al cargar la página ---
 document.addEventListener("DOMContentLoaded", initFromSession);
-
