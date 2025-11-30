@@ -9,17 +9,22 @@ const db = require("../db");
  *   direccion_envio,
  *   items: [{ id_variante, cantidad }]
  * }
- * Requiere token de cliente (req.user.id_cliente)
+ *
+ * Requiere:
+ *   - Token de CLIENTE válido (authCliente)
+ *   - authCliente coloca el payload en req.user => { id_cliente, nombre_completo, email, tipo: "Cliente" }
  */
 exports.crearPedido = async (req, res) => {
   const { metodo_pago, direccion_envio, items } = req.body;
 
+  // Validar items
   if (!items || !Array.isArray(items) || items.length === 0) {
     return res
       .status(400)
       .json({ mensaje: "Debes enviar al menos un ítem en el pedido." });
   }
 
+  // Validar que el token sea de cliente
   if (!req.user || !req.user.id_cliente) {
     return res
       .status(400)
@@ -28,6 +33,7 @@ exports.crearPedido = async (req, res) => {
 
   const id_cliente = req.user.id_cliente;
 
+  // Usamos conexión dedicada para poder manejar transacción
   const client = await db.pool.connect();
 
   try {
@@ -36,12 +42,14 @@ exports.crearPedido = async (req, res) => {
     let total = 0;
     const itemsProcesados = [];
 
-    // Validar stock y obtener precios
+    // 1. Validar stock y calcular total
     for (const item of items) {
       const { id_variante, cantidad } = item;
 
       if (!id_variante || !cantidad || cantidad <= 0) {
-        throw new Error("Cada ítem debe tener id_variante y cantidad > 0.");
+        throw new Error(
+          "Cada ítem debe tener id_variante y cantidad mayor a 0."
+        );
       }
 
       const varianteResult = await client.query(
@@ -50,11 +58,12 @@ exports.crearPedido = async (req, res) => {
       );
 
       if (varianteResult.rows.length === 0) {
-        throw new Error(`Variante ${id_variante} no existe.`);
+        throw new Error(`La variante ${id_variante} no existe.`);
       }
 
       const variante = varianteResult.rows[0];
       const precio = Number(variante.precio || 0);
+
       const stockActual =
         variante.stock === null || variante.stock === undefined
           ? null
@@ -76,7 +85,7 @@ exports.crearPedido = async (req, res) => {
       });
     }
 
-    // Crear el pedido
+    // 2. Crear el pedido
     const pedidoResult = await client.query(
       `INSERT INTO pedido (
          id_cliente,
@@ -88,12 +97,18 @@ exports.crearPedido = async (req, res) => {
        )
        VALUES ($1, NOW(), $2, $3, $4, $5)
        RETURNING id_pedido, id_cliente, fecha_hora, total, metodo_pago, direccion_envio, estado_pedido`,
-      [id_cliente, total, metodo_pago || null, direccion_envio || null, "Pendiente"]
+      [
+        id_cliente,
+        total,
+        metodo_pago || null,
+        direccion_envio || null,
+        "Pendiente",
+      ]
     );
 
     const pedido = pedidoResult.rows[0];
 
-    // Insertar detalle y actualizar stock
+    // 3. Insertar detalle y actualizar stock
     for (const item of itemsProcesados) {
       await client.query(
         `INSERT INTO detalle_pedido (
@@ -101,7 +116,8 @@ exports.crearPedido = async (req, res) => {
            id_variante,
            cantidad,
            precio_unitario
-         ) VALUES ($1, $2, $3, $4)`,
+         )
+         VALUES ($1, $2, $3, $4)`,
         [
           pedido.id_pedido,
           item.id_variante,
@@ -132,8 +148,9 @@ exports.crearPedido = async (req, res) => {
 };
 
 /**
- * Listar pedidos del cliente autenticado
+ * Listar pedidos del CLIENTE autenticado (para tienda.html)
  * GET /api/pedidos/mis-pedidos
+ * Requiere authCliente (token con id_cliente, tipo: "Cliente")
  */
 exports.obtenerPedidosCliente = async (req, res) => {
   if (!req.user || !req.user.id_cliente) {
@@ -167,8 +184,11 @@ exports.obtenerPedidosCliente = async (req, res) => {
 };
 
 /**
- * Listar TODOS los pedidos (para el panel de admin)
+ * Listar TODOS los pedidos (para el panel de admin en el index)
  * GET /api/pedidos
+ * Requiere:
+ *   - auth (token con rol)
+ *   - adminOnly (req.user.rol === "Admin")
  */
 exports.listarPedidos = async (req, res) => {
   try {
@@ -193,3 +213,4 @@ exports.listarPedidos = async (req, res) => {
     });
   }
 };
+
