@@ -4,9 +4,9 @@ require("dotenv").config();
 
 /**
  * Middleware de autenticación para CLIENTES del e-commerce.
- * - Lee el header Authorization: Bearer <token>
+ * - Lee Authorization: Bearer <token>
  * - Verifica con JWT_SECRET
- * - Valida que el payload tenga id_cliente y tipo === "Cliente"
+ * - Valida que tenga id_cliente y tipo === "Cliente"
  * - Deja el payload en req.user
  */
 module.exports = function authCliente(req, res, next) {
@@ -17,21 +17,19 @@ module.exports = function authCliente(req, res, next) {
   }
 
   // Puede venir como "Bearer xxxxx" o solo el token
-  const token = header.startsWith("Bearer ")
-    ? header.slice(7)
-    : header;
+  const token = header.startsWith("Bearer ") ? header.slice(7) : header;
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // 💡 Muy importante: asegurarnos de que sea un token de CLIENTE
+    // 💡 Aseguramos que sea un token de CLIENTE, no de usuario interno
     if (!decoded.id_cliente || decoded.tipo !== "Cliente") {
       return res
         .status(400)
         .json({ mensaje: "El token no corresponde a un cliente válido." });
     }
 
-    // Para compatibilidad con tu código actual (pedidos.controller usa req.user)
+    // Para tu controlador, seguimos usando req.user
     req.user = decoded;
 
     next();
