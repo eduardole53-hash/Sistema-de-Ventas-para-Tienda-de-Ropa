@@ -1125,6 +1125,14 @@ if (posConfirmBtn) {
 
 // === CREACIÓN DE USUARIOS INTERNOS (solo Admin) ===
 
+// Referencias seguras a los campos del formulario
+const userForm = document.getElementById("user-form");
+const userFormMessage = document.getElementById("user-form-message");
+
+const userNameInput = document.getElementById("user-name");
+const userPasswordInput = document.getElementById("user-password");
+const userRoleSelect = document.getElementById("user-role-select");
+
 async function crearUsuarioInterno(nombreUsuario, password, rol) {
   const session = loadSession();
   if (!session || !session.token) {
@@ -1163,17 +1171,18 @@ if (userForm) {
     e.preventDefault();
 
     console.log("🚀 Submit de user-form disparado");
-    alert("Submit de Crear usuario disparado"); // Solo para probar
 
     userFormMessage.textContent = "";
     userFormMessage.classList.remove("error", "success");
 
-    const nombreUsuario = document.getElementById("user-name").value.trim();
-    const password = document.getElementById("user-password").value.trim();
-
-    const rolSelect = document.getElementById("user-role-select");
-    const rol = rolSelect ? (rolSelect.value || "").trim() : "";
-
+    // Leer valores de forma segura
+    const nombreUsuario = userNameInput
+      ? (userNameInput.value || "").trim()
+      : "";
+    const password = userPasswordInput
+      ? (userPasswordInput.value || "").trim()
+      : "";
+    const rol = userRoleSelect ? (userRoleSelect.value || "").trim() : "";
 
     console.log("Datos capturados:", { nombreUsuario, password, rol });
 
@@ -1199,6 +1208,10 @@ if (userForm) {
 } else {
   console.log("⚠️ userForm NO encontrado en el DOM");
 }
+
+// --- Iniciar al cargar la página ---
+document.addEventListener("DOMContentLoaded", initFromSession);
+
 
 
 
