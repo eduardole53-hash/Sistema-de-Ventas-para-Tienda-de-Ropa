@@ -147,13 +147,20 @@ function switchView(target) {
 
   if (target === "productos") {
     contentTitle.textContent = "Productos";
+  } else if (target === "inventario") {
+    contentTitle.textContent = "Inventario";
+    // Más adelante aquí cargaremos el resumen de stock
   } else if (target === "pos") {
     contentTitle.textContent = "Punto de venta";
     initPOS();
+  } else if (target === "registro-ventas") {
+    contentTitle.textContent = "Registro de ventas";
+    // Más adelante aquí cargaremos ventas y pedidos desde la BD
   } else if (target === "usuarios") {
     contentTitle.textContent = "Gestión de usuarios";
   }
 }
+
 
 
 viewButtons.forEach((btn) => {

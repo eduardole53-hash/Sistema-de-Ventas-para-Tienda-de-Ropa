@@ -57,16 +57,32 @@
         </div>
 
         <div class="sidebar-menu">
+          <!-- Ver productos -->
           <button class="btn btn-secondary btn-block" data-view="productos">
             🧾 Ver productos
           </button>
+
+          <!-- Inventario (solo botón por ahora) -->
+          <button class="btn btn-secondary btn-block" data-view="inventario">
+            📦 Inventario
+          </button>
+
+          <!-- Punto de venta -->
           <button class="btn btn-secondary btn-block" data-view="pos">
             🛒 Punto de venta
           </button>
+
+          <!-- Registro de ventas -->
+          <button class="btn btn-secondary btn-block" data-view="registro-ventas">
+            📊 Registro de ventas
+          </button>
+
+          <!-- Crear usuarios -->
           <button class="btn btn-secondary btn-block" data-view="usuarios">
             👤 Crear usuarios
           </button>
         </div>
+
 
         <button id="logout-btn" class="btn btn-outline btn-block mt-2">
           Cerrar sesión
@@ -81,6 +97,25 @@
 
         <!-- Vista de productos + variantes -->
         <div id="view-productos" class="view active-view">
+
+          <!-- Vista de Inventario (placeholder) -->
+          <div id="view-inventario" class="view">
+            <div class="pos-header">
+              <h3>Módulo de inventario</h3>
+              <p class="subtitle">
+                Aquí podrás ver y ajustar el stock de cada variante de producto.
+                (Sección en construcción).
+              </p>
+            </div>
+
+            <p>
+              Próximamente: resumen de stock, alertas de inventario bajo y
+              movimientos de entrada/salida.
+            </p>
+          </div>
+
+
+
           <!-- Panel de administración de productos (solo Admin) -->
           <div id="product-admin-panel" class="product-admin-panel hidden">
             <h3>Registrar nuevo producto</h3>
@@ -339,6 +374,71 @@
             </div>
           </form>
         </div>
+
+        <!-- Vista de Registro de ventas -->
+          <div id="view-registro-ventas" class="view">
+            <div class="pos-header">
+              <h3>Registro de ventas</h3>
+              <p class="subtitle">
+                Consulta las ventas físicas realizadas en tienda y los pedidos online.
+              </p>
+            </div>
+
+            <!-- Sección 1: Ventas físicas -->
+            <section class="sales-section">
+              <div class="table-toolbar">
+                <h4>Ventas físicas</h4>
+                <span id="ventas-fisicas-count" class="badge-info">0 registros</span>
+              </div>
+
+              <div class="table-wrapper">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>ID venta</th>
+                      <th>Fecha</th>
+                      <th>Cliente</th>
+                      <th>Método de pago</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ventas-fisicas-body">
+                    <!-- Aquí llenaremos las ventas desde app.js -->
+                  </tbody>
+                </table>
+              </div>
+
+              <p id="ventas-fisicas-message" class="form-message"></p>
+            </section>
+
+            <!-- Sección 2: Pedidos online -->
+            <section class="sales-section" style="margin-top: 2rem;">
+              <div class="table-toolbar">
+                <h4>Pedidos online</h4>
+                <span id="pedidos-online-count" class="badge-info">0 pedidos</span>
+              </div>
+
+              <div class="table-wrapper">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>ID pedido</th>
+                      <th>Fecha</th>
+                      <th>Cliente</th>
+                      <th>Estado</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pedidos-online-body">
+                    <!-- Aquí llenaremos los pedidos desde app.js -->
+                  </tbody>
+                </table>
+              </div>
+
+              <p id="pedidos-online-message" class="form-message"></p>
+            </section>
+          </div>
+
 
         <!-- Vista POS (Punto de venta) -->
         <div id="view-pos" class="view">
