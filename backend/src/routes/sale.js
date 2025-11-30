@@ -1,10 +1,13 @@
-
-// src/routes/sales.js
+// src/routes/sale.js
 const express = require("express");
 const router = express.Router();
-const controller = require("../controllers/sales.controller");
-const { auth } = require("../middleware/auth");
+const saleController = require("../controllers/sale.controller");
+const { auth, adminOnly } = require("../middleware/auth");
 
-router.post("/", auth, controller.crearVenta);
+// Registrar venta (ya lo usas desde el POS)
+router.post("/", auth, saleController.crearVenta);
+
+//  listar todas las ventas físicas
+router.get("/", auth, adminOnly, saleController.listarVentas);
 
 module.exports = router;
