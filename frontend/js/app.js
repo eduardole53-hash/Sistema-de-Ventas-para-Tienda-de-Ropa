@@ -164,6 +164,7 @@ function switchView(target) {
     initPOS();
   } else if (target === "registro-ventas") {
     contentTitle.textContent = "Registro de ventas";
+    loadRegistroVentas();
     // Más adelante aquí cargaremos ventas y pedidos desde la BD
   } else if (target === "usuarios") {
     contentTitle.textContent = "Gestión de usuarios";
@@ -1139,168 +1140,149 @@ if (posConfirmBtn) {
   });
 }
 
-// === REGISTRO DE VENTAS: cargar ventas físicas y pedidos online ===
+// === REGISTRO DE VENTAS (ventas físicas + pedidos online) ===
 
 async function loadRegistroVentas() {
   const session = loadSession();
   if (!session || !session.token) {
-    if (ventasFisicasMessage) {
-      ventasFisicasMessage.textContent =
-        "Sesión no válida. Vuelve a iniciar sesión.";
-      ventasFisicasMessage.classList.add("error");
-    }
-    if (pedidosOnlineMessage) {
-      pedidosOnlineMessage.textContent =
-        "Sesión no válida. Vuelve a iniciar sesión.";
-      pedidosOnlineMessage.classList.add("error");
-    }
+    console.warn("No hay sesión válida, no se puede cargar registro de ventas.");
     return;
   }
 
-  // Limpiar mensajes / tablas
+  // Limpiar tablas y mensajes
+  if (ventasFisicasBody) ventasFisicasBody.innerHTML = "";
+  if (ventasFisicasCountSpan) ventasFisicasCountSpan.textContent = "0 registros";
   if (ventasFisicasMessage) {
     ventasFisicasMessage.textContent = "";
     ventasFisicasMessage.classList.remove("error", "success");
   }
+
+  if (pedidosOnlineBody) pedidosOnlineBody.innerHTML = "";
+  if (pedidosOnlineCountSpan) pedidosOnlineCountSpan.textContent = "0 pedidos";
   if (pedidosOnlineMessage) {
     pedidosOnlineMessage.textContent = "";
     pedidosOnlineMessage.classList.remove("error", "success");
   }
-  if (ventasFisicasBody) ventasFisicasBody.innerHTML = "";
-  if (pedidosOnlineBody) pedidosOnlineBody.innerHTML = "";
-  if (ventasFisicasCountSpan) ventasFisicasCountSpan.textContent = "Cargando...";
-  if (pedidosOnlineCountSpan) pedidosOnlineCountSpan.textContent = "Cargando...";
 
   try {
     const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${session.token}`,
+      Authorization: `Bearer ${session.token}`,   // 👈 AQUÍ VA EL TOKEN
     };
 
-    // 1) Ventas físicas
-    const ventasRes = await fetch(`${API_URL}/venta`, {
-      method: "GET",
-      headers,
-    });
+    // Pedir ventas físicas y pedidos online en paralelo
+    const [ventasRes, pedidosRes] = await Promise.all([
+      fetch(`${API_URL}/venta`, { headers }),
+      fetch(`${API_URL}/pedidos`, { headers }),
+    ]);
 
-    if (!ventasRes.ok) {
-      const errorData = await ventasRes.json().catch(() => ({}));
-      const msg =
-        errorData.mensaje ||
-        errorData.error ||
-        "No se pudieron obtener las ventas físicas.";
-      if (ventasFisicasMessage) {
-        ventasFisicasMessage.textContent = msg;
-        ventasFisicasMessage.classList.add("error");
-      }
-      if (ventasFisicasCountSpan) ventasFisicasCountSpan.textContent = "0 registros";
-    } else {
+    // --------- VENTAS FÍSICAS ----------
+    if (ventasRes.ok) {
       const ventas = await ventasRes.json();
-      const listaVentas = Array.isArray(ventas) ? ventas : [];
-
-      if (ventasFisicasCountSpan)
-        ventasFisicasCountSpan.textContent = `${listaVentas.length} registros`;
-
-      if (listaVentas.length === 0) {
-        if (ventasFisicasMessage) {
-          ventasFisicasMessage.textContent =
-            "No hay ventas físicas registradas aún.";
+      if (Array.isArray(ventas) && ventas.length > 0) {
+        if (ventasFisicasCountSpan) {
+          ventasFisicasCountSpan.textContent = `${ventas.length} registros`;
         }
-      } else if (ventasFisicasBody) {
-        const rows = listaVentas
+
+        const rowsVentas = ventas
           .map((v) => {
-            const id = v.id_venta ?? v.id ?? "-";
-            const fecha = v.fecha_venta || v.fecha || "-";
-            const cliente = v.cliente || "Consumidor final";
-            const metodo =
-              v.metodo_pago || v.metodo || v.metodo_de_pago || "-";
-            const total =
-              v.total != null ? Number(v.total).toFixed(2) : "0.00";
+            const fechaStr = v.fecha || v.fecha_hora
+              ? new Date(v.fecha || v.fecha_hora).toLocaleString("es-PA")
+              : "-";
+            const cliente = v.cliente || v.id_cliente || v.id_usuario || "-";
+            const metodo = v.metodo_pago || "-";
+            const totalNum =
+              v.total != null
+                ? Number(v.total).toFixed(2)
+                : (v.monto_total != null
+                    ? Number(v.monto_total).toFixed(2)
+                    : "0.00");
 
             return `
               <tr>
-                <td>${id}</td>
-                <td>${fecha}</td>
+                <td>${v.id_venta}</td>
+                <td>${fechaStr}</td>
                 <td>${cliente}</td>
                 <td>${metodo}</td>
-                <td>${total}</td>
+                <td>${totalNum}</td>
               </tr>
             `;
           })
           .join("");
 
-        ventasFisicasBody.innerHTML = rows;
+        if (ventasFisicasBody) ventasFisicasBody.innerHTML = rowsVentas;
+      } else {
+        if (ventasFisicasMessage) {
+          ventasFisicasMessage.textContent = "No hay ventas registradas aún.";
+        }
+      }
+    } else {
+      const txt = await ventasRes.text();
+      console.error("Error HTTP cargando ventas:", txt);
+      if (ventasFisicasMessage) {
+        ventasFisicasMessage.textContent =
+          "No se pudieron cargar las ventas físicas.";
+        ventasFisicasMessage.classList.add("error");
       }
     }
 
-    // 2) Pedidos online
-    const pedidosRes = await fetch(`${API_URL}/pedidos`, {
-      method: "GET",
-      headers,
-    });
-
-    if (!pedidosRes.ok) {
-      const errorData = await pedidosRes.json().catch(() => ({}));
-      const msg =
-        errorData.mensaje ||
-        errorData.error ||
-        "No se pudieron obtener los pedidos online.";
-      if (pedidosOnlineMessage) {
-        pedidosOnlineMessage.textContent = msg;
-        pedidosOnlineMessage.classList.add("error");
-      }
-      if (pedidosOnlineCountSpan) pedidosOnlineCountSpan.textContent = "0 pedidos";
-    } else {
+    // --------- PEDIDOS ONLINE ----------
+    if (pedidosRes.ok) {
       const pedidos = await pedidosRes.json();
-      const listaPedidos = Array.isArray(pedidos) ? pedidos : [];
-
-      if (pedidosOnlineCountSpan)
-        pedidosOnlineCountSpan.textContent = `${listaPedidos.length} pedidos`;
-
-      if (listaPedidos.length === 0) {
-        if (pedidosOnlineMessage) {
-          pedidosOnlineMessage.textContent =
-            "No hay pedidos online registrados aún.";
+      if (Array.isArray(pedidos) && pedidos.length > 0) {
+        if (pedidosOnlineCountSpan) {
+          pedidosOnlineCountSpan.textContent = `${pedidos.length} pedidos`;
         }
-      } else if (pedidosOnlineBody) {
-        const rows = listaPedidos
+
+        const rowsPedidos = pedidos
           .map((p) => {
-            const id = p.id_pedido ?? p.id ?? "-";
-            const fecha = p.fecha_pedido || p.fecha || "-";
-            const cliente = p.cliente || p.nombre_cliente || "Sin nombre";
-            const estado = p.estado_pedido || p.estado || "-";
-            const total =
+            const fechaStr = p.fecha || p.fecha_hora
+              ? new Date(p.fecha || p.fecha_hora).toLocaleString("es-PA")
+              : "-";
+            const cliente = p.cliente || p.id_cliente || "Sin nombre";
+            const estado = p.estado || p.estado_pedido || "-";
+            const totalNum =
               p.total != null ? Number(p.total).toFixed(2) : "0.00";
 
             return `
               <tr>
-                <td>${id}</td>
-                <td>${fecha}</td>
+                <td>${p.id_pedido}</td>
+                <td>${fechaStr}</td>
                 <td>${cliente}</td>
                 <td>${estado}</td>
-                <td>${total}</td>
+                <td>${totalNum}</td>
               </tr>
             `;
           })
           .join("");
 
-        pedidosOnlineBody.innerHTML = rows;
+        if (pedidosOnlineBody) pedidosOnlineBody.innerHTML = rowsPedidos;
+      } else {
+        if (pedidosOnlineMessage) {
+          pedidosOnlineMessage.textContent = "No hay pedidos online aún.";
+        }
+      }
+    } else {
+      const txt = await pedidosRes.text();
+      console.error("Error HTTP cargando pedidos:", txt);
+      if (pedidosOnlineMessage) {
+        pedidosOnlineMessage.textContent =
+          "No se pudieron cargar los pedidos online.";
+        pedidosOnlineMessage.classList.add("error");
       }
     }
   } catch (error) {
-    console.error("Error cargando registro de ventas/pedidos:", error);
+    console.error("Error en loadRegistroVentas:", error);
     if (ventasFisicasMessage) {
       ventasFisicasMessage.textContent =
-        "Error al cargar las ventas físicas desde el servidor.";
+        "Error al conectar con el servidor para cargar las ventas.";
       ventasFisicasMessage.classList.add("error");
     }
     if (pedidosOnlineMessage) {
       pedidosOnlineMessage.textContent =
-        "Error al cargar los pedidos online desde el servidor.";
+        "Error al conectar con el servidor para cargar los pedidos.";
       pedidosOnlineMessage.classList.add("error");
     }
-    if (ventasFisicasCountSpan) ventasFisicasCountSpan.textContent = "0 registros";
-    if (pedidosOnlineCountSpan) pedidosOnlineCountSpan.textContent = "0 pedidos";
   }
 }
 
