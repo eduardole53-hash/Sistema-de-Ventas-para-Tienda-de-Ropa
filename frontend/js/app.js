@@ -1,4 +1,4 @@
-// URL base de tu backend
+// URL base de tu backendconst
 const API_URL = "http://localhost:4000/api";
 // Endpoint de ventas
 const SALES_ENDPOINT = `${API_URL}/venta`;
@@ -53,6 +53,15 @@ const posCartTotalSpan = document.getElementById("pos-cart-total");
 const posCustomerInput = document.getElementById("pos-customer-name");
 const posPaymentSelect = document.getElementById("pos-payment-method");
 const posConfirmBtn = document.getElementById("pos-confirm-btn");
+
+// --- Registro de ventas (vista nueva) ---
+const ventasFisicasBody = document.getElementById("ventas-fisicas-body");
+const ventasFisicasCountSpan = document.getElementById("ventas-fisicas-count");
+const ventasFisicasMessage = document.getElementById("ventas-fisicas-message");
+
+const pedidosOnlineBody = document.getElementById("pedidos-online-body");
+const pedidosOnlineCountSpan = document.getElementById("pedidos-online-count");
+const pedidosOnlineMessage = document.getElementById("pedidos-online-message");
 
 // --- Formulario de creación de usuarios internos ---
 const userForm = document.getElementById("user-form");
@@ -1129,6 +1138,173 @@ if (posConfirmBtn) {
     }
   });
 }
+
+// === REGISTRO DE VENTAS: cargar ventas físicas y pedidos online ===
+
+async function loadRegistroVentas() {
+  const session = loadSession();
+  if (!session || !session.token) {
+    if (ventasFisicasMessage) {
+      ventasFisicasMessage.textContent =
+        "Sesión no válida. Vuelve a iniciar sesión.";
+      ventasFisicasMessage.classList.add("error");
+    }
+    if (pedidosOnlineMessage) {
+      pedidosOnlineMessage.textContent =
+        "Sesión no válida. Vuelve a iniciar sesión.";
+      pedidosOnlineMessage.classList.add("error");
+    }
+    return;
+  }
+
+  // Limpiar mensajes / tablas
+  if (ventasFisicasMessage) {
+    ventasFisicasMessage.textContent = "";
+    ventasFisicasMessage.classList.remove("error", "success");
+  }
+  if (pedidosOnlineMessage) {
+    pedidosOnlineMessage.textContent = "";
+    pedidosOnlineMessage.classList.remove("error", "success");
+  }
+  if (ventasFisicasBody) ventasFisicasBody.innerHTML = "";
+  if (pedidosOnlineBody) pedidosOnlineBody.innerHTML = "";
+  if (ventasFisicasCountSpan) ventasFisicasCountSpan.textContent = "Cargando...";
+  if (pedidosOnlineCountSpan) pedidosOnlineCountSpan.textContent = "Cargando...";
+
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session.token}`,
+    };
+
+    // 1) Ventas físicas
+    const ventasRes = await fetch(`${API_URL}/venta`, {
+      method: "GET",
+      headers,
+    });
+
+    if (!ventasRes.ok) {
+      const errorData = await ventasRes.json().catch(() => ({}));
+      const msg =
+        errorData.mensaje ||
+        errorData.error ||
+        "No se pudieron obtener las ventas físicas.";
+      if (ventasFisicasMessage) {
+        ventasFisicasMessage.textContent = msg;
+        ventasFisicasMessage.classList.add("error");
+      }
+      if (ventasFisicasCountSpan) ventasFisicasCountSpan.textContent = "0 registros";
+    } else {
+      const ventas = await ventasRes.json();
+      const listaVentas = Array.isArray(ventas) ? ventas : [];
+
+      if (ventasFisicasCountSpan)
+        ventasFisicasCountSpan.textContent = `${listaVentas.length} registros`;
+
+      if (listaVentas.length === 0) {
+        if (ventasFisicasMessage) {
+          ventasFisicasMessage.textContent =
+            "No hay ventas físicas registradas aún.";
+        }
+      } else if (ventasFisicasBody) {
+        const rows = listaVentas
+          .map((v) => {
+            const id = v.id_venta ?? v.id ?? "-";
+            const fecha = v.fecha_venta || v.fecha || "-";
+            const cliente = v.cliente || "Consumidor final";
+            const metodo =
+              v.metodo_pago || v.metodo || v.metodo_de_pago || "-";
+            const total =
+              v.total != null ? Number(v.total).toFixed(2) : "0.00";
+
+            return `
+              <tr>
+                <td>${id}</td>
+                <td>${fecha}</td>
+                <td>${cliente}</td>
+                <td>${metodo}</td>
+                <td>${total}</td>
+              </tr>
+            `;
+          })
+          .join("");
+
+        ventasFisicasBody.innerHTML = rows;
+      }
+    }
+
+    // 2) Pedidos online
+    const pedidosRes = await fetch(`${API_URL}/pedidos`, {
+      method: "GET",
+      headers,
+    });
+
+    if (!pedidosRes.ok) {
+      const errorData = await pedidosRes.json().catch(() => ({}));
+      const msg =
+        errorData.mensaje ||
+        errorData.error ||
+        "No se pudieron obtener los pedidos online.";
+      if (pedidosOnlineMessage) {
+        pedidosOnlineMessage.textContent = msg;
+        pedidosOnlineMessage.classList.add("error");
+      }
+      if (pedidosOnlineCountSpan) pedidosOnlineCountSpan.textContent = "0 pedidos";
+    } else {
+      const pedidos = await pedidosRes.json();
+      const listaPedidos = Array.isArray(pedidos) ? pedidos : [];
+
+      if (pedidosOnlineCountSpan)
+        pedidosOnlineCountSpan.textContent = `${listaPedidos.length} pedidos`;
+
+      if (listaPedidos.length === 0) {
+        if (pedidosOnlineMessage) {
+          pedidosOnlineMessage.textContent =
+            "No hay pedidos online registrados aún.";
+        }
+      } else if (pedidosOnlineBody) {
+        const rows = listaPedidos
+          .map((p) => {
+            const id = p.id_pedido ?? p.id ?? "-";
+            const fecha = p.fecha_pedido || p.fecha || "-";
+            const cliente = p.cliente || p.nombre_cliente || "Sin nombre";
+            const estado = p.estado_pedido || p.estado || "-";
+            const total =
+              p.total != null ? Number(p.total).toFixed(2) : "0.00";
+
+            return `
+              <tr>
+                <td>${id}</td>
+                <td>${fecha}</td>
+                <td>${cliente}</td>
+                <td>${estado}</td>
+                <td>${total}</td>
+              </tr>
+            `;
+          })
+          .join("");
+
+        pedidosOnlineBody.innerHTML = rows;
+      }
+    }
+  } catch (error) {
+    console.error("Error cargando registro de ventas/pedidos:", error);
+    if (ventasFisicasMessage) {
+      ventasFisicasMessage.textContent =
+        "Error al cargar las ventas físicas desde el servidor.";
+      ventasFisicasMessage.classList.add("error");
+    }
+    if (pedidosOnlineMessage) {
+      pedidosOnlineMessage.textContent =
+        "Error al cargar los pedidos online desde el servidor.";
+      pedidosOnlineMessage.classList.add("error");
+    }
+    if (ventasFisicasCountSpan) ventasFisicasCountSpan.textContent = "0 registros";
+    if (pedidosOnlineCountSpan) pedidosOnlineCountSpan.textContent = "0 pedidos";
+  }
+}
+
+
 
 // === CREACIÓN DE USUARIOS INTERNOS (solo Admin) ===
 
