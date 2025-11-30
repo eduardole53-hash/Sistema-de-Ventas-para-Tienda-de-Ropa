@@ -28,7 +28,6 @@ exports.crearPedido = async (req, res) => {
 
   const id_cliente = req.user.id_cliente;
 
-  // Ojo: aquí usas db.pool.connect(), asumiendo que en db exportas pool además de query
   const client = await db.pool.connect();
 
   try {
@@ -134,6 +133,7 @@ exports.crearPedido = async (req, res) => {
 
 /**
  * Listar pedidos del cliente autenticado
+ * GET /api/pedidos/mis-pedidos
  */
 exports.obtenerPedidosCliente = async (req, res) => {
   if (!req.user || !req.user.id_cliente) {
@@ -152,7 +152,7 @@ exports.obtenerPedidosCliente = async (req, res) => {
          total,
          metodo_pago,
          direccion_envio,
-         estado_pedido AS estado
+         estado_pedido
        FROM pedido
        WHERE id_cliente = $1
        ORDER BY fecha_hora DESC`,
@@ -167,21 +167,22 @@ exports.obtenerPedidosCliente = async (req, res) => {
 };
 
 /**
- * Listar TODOS los pedidos (para el panel de Admin)
+ * Listar TODOS los pedidos (para el panel de admin)
  * GET /api/pedidos
  */
 exports.listarPedidos = async (req, res) => {
   try {
-    const result = await db.query(`
-      SELECT
-        id_pedido,
-        fecha_hora AS fecha,
-        id_cliente AS cliente,
-        estado_pedido AS estado,
-        total
-      FROM pedido
-      ORDER BY fecha_hora DESC
-    `);
+    const result = await db.query(
+      `SELECT
+         id_pedido,
+         fecha_hora AS fecha,
+         total,
+         metodo_pago,
+         direccion_envio,
+         estado_pedido AS estado
+       FROM pedido
+       ORDER BY fecha_hora DESC`
+    );
 
     res.json(result.rows);
   } catch (error) {
@@ -192,5 +193,3 @@ exports.listarPedidos = async (req, res) => {
     });
   }
 };
-
-
