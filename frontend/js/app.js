@@ -54,6 +54,11 @@ const posCustomerInput = document.getElementById("pos-customer-name");
 const posPaymentSelect = document.getElementById("pos-payment-method");
 const posConfirmBtn = document.getElementById("pos-confirm-btn");
 
+// --- Formulario de creación de usuarios internos ---
+const userForm = document.getElementById("user-form");
+const userFormMessage = document.getElementById("user-form-message");
+
+
 // Recibo
 const receiptPanel = document.getElementById("receipt-panel");
 const receiptIdSpan = document.getElementById("receipt-id");
@@ -145,8 +150,11 @@ function switchView(target) {
   } else if (target === "pos") {
     contentTitle.textContent = "Punto de venta";
     initPOS();
+  } else if (target === "usuarios") {
+    contentTitle.textContent = "Gestión de usuarios";
   }
 }
+
 
 viewButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -1114,6 +1122,76 @@ if (posConfirmBtn) {
     }
   });
 }
+
+// === CREACIÓN DE USUARIOS INTERNOS (solo Admin) ===
+
+async function crearUsuarioInterno(nombreUsuario, password, rol) {
+  const session = loadSession();
+  if (!session || !session.token) {
+    throw new Error("Sesión no válida. Vuelve a iniciar sesión.");
+  }
+
+  const response = await fetch(`${API_URL}/usuario/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session.token}`,
+    },
+    body: JSON.stringify({
+      nombre_usuario: nombreUsuario,
+      password,
+      rol,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    const msg =
+      errorData.mensaje ||
+      errorData.error ||
+      "No se pudo crear el usuario interno.";
+    throw new Error(msg);
+  }
+
+  return await response.json();
+}
+
+if (userForm) {
+  userForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    userFormMessage.textContent = "";
+    userFormMessage.classList.remove("error", "success");
+
+    const nombreUsuario = document.getElementById("user-name").value.trim();
+    const password = document.getElementById("user-password").value.trim();
+    const rol = document.getElementById("user-role").value.trim();
+
+    if (!nombreUsuario || !password || !rol) {
+      userFormMessage.textContent = "Completa todos los campos obligatorios.";
+      userFormMessage.classList.add("error");
+      return;
+    }
+
+    try {
+      const data = await crearUsuarioInterno(nombreUsuario, password, rol);
+      console.log("Usuario creado:", data);
+
+      userFormMessage.textContent = "Usuario creado correctamente.";
+      userFormMessage.classList.add("success");
+      userForm.reset();
+    } catch (error) {
+      console.error("Error creando usuario interno:", error);
+      userFormMessage.textContent = error.message;
+      userFormMessage.classList.add("error");
+    }
+  });
+}
+
+
+
+
+
 
 // --- Iniciar al cargar la página ---
 document.addEventListener("DOMContentLoaded", initFromSession);

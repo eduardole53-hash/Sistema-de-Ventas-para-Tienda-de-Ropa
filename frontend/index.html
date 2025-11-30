@@ -62,13 +62,17 @@
         </div>
 
         <div class="sidebar-menu">
-          <button class="btn btn-secondary btn-block" data-view="productos">
-            🧾 Ver productos
-          </button>
-          <button class="btn btn-secondary btn-block" data-view="pos">
-            🛒 Punto de venta
-          </button>
-        </div>
+            <button class="btn btn-secondary btn-block" data-view="productos">
+              🧾 Ver productos
+            </button>
+            <button class="btn btn-secondary btn-block" data-view="pos">
+              🛒 Punto de venta
+            </button>
+            <button class="btn btn-secondary btn-block" data-view="usuarios">
+              👤 Crear usuarios
+            </button>
+          </div>
+
 
         <button id="logout-btn" class="btn btn-outline btn-block mt-2">
           Cerrar sesión
@@ -297,6 +301,60 @@
               Registra ventas usando las variantes de producto (talla, color, stock y precio).
             </p>
           </div>
+
+                  <!-- Vista de creación de usuarios internos -->
+        <div id="view-usuarios" class="view">
+          <div class="pos-header">
+            <h3>Gestión de usuarios internos</h3>
+            <p class="subtitle">
+              Solo el usuario Admin puede crear nuevos usuarios para el sistema interno.
+            </p>
+          </div>
+
+          <form id="user-form" class="form form-horizontal">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="user-name">Nombre de usuario *</label>
+                <input
+                  type="text"
+                  id="user-name"
+                  placeholder="Ej: vendedora1"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="user-password">Contraseña *</label>
+                <input
+                  type="password"
+                  id="user-password"
+                  placeholder="Contraseña del usuario"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="user-role">Rol *</label>
+                <select id="user-role" required>
+                  <option value="">Selecciona un rol...</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Vendedor">Vendedor</option>
+                  <option value="Cajero">Cajero</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row form-row-end">
+              <p id="user-form-message" class="form-message"></p>
+              <button type="submit" class="btn btn-primary">
+                💾 Crear usuario
+              </button>
+            </div>
+          </form>
+        </div>
+
 
           <div class="pos-columns">
             <!-- Columna izquierda: selección de ítems -->
