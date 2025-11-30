@@ -1167,10 +1167,11 @@ if (userForm) {
     userFormMessage.textContent = "";
     userFormMessage.classList.remove("error", "success");
 
-    // Tomar los elementos de forma segura
-    const nameEl = document.getElementById("user-name");
-    const passEl = document.getElementById("user-password");
-    const roleEl = document.getElementById("user-role-select");
+    // Tomar los elementos desde el propio formulario (más robusto)
+    const nameEl = userForm.querySelector('input[type="text"]');
+    const passEl = userForm.querySelector('input[type="password"]');
+    const roleEl = userForm.querySelector("select");
+
 
     // Si alguno es null, se convierte en cadena vacía y NO revienta
     const nombreUsuario =
