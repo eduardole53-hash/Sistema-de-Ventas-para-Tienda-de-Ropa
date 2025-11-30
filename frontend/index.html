@@ -3,18 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistema de Ventas - Tienda de Ropa</title>
+  <title>Sistema de Ventas Moda Boutique</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <header class="main-header">
-    <div class="logo">
-      <span class="logo-mark">SR</span>
-      <span class="logo-text">Sistema de Ventas - Ropa</span>
-    </div>
-    <nav class="main-nav">
-      <span class="badge-env">Backend: http://localhost:4000</span>
-    </nav>
+  <!-- Header centrado con nuevo título -->
+  <header
+    class="main-header"
+    style="display: flex; justify-content: center; align-items: center; padding: 10px 20px;"
+  >
+    <h1 class="main-title">Sistema de Ventas Moda Boutique</h1>
   </header>
 
   <main class="main-container">
@@ -62,17 +60,16 @@
         </div>
 
         <div class="sidebar-menu">
-            <button class="btn btn-secondary btn-block" data-view="productos">
-              🧾 Ver productos
-            </button>
-            <button class="btn btn-secondary btn-block" data-view="pos">
-              🛒 Punto de venta
-            </button>
-            <button class="btn btn-secondary btn-block" data-view="usuarios">
-              👤 Crear usuarios
-            </button>
-          </div>
-
+          <button class="btn btn-secondary btn-block" data-view="productos">
+            🧾 Ver productos
+          </button>
+          <button class="btn btn-secondary btn-block" data-view="pos">
+            🛒 Punto de venta
+          </button>
+          <button class="btn btn-secondary btn-block" data-view="usuarios">
+            👤 Crear usuarios
+          </button>
+        </div>
 
         <button id="logout-btn" class="btn btn-outline btn-block mt-2">
           Cerrar sesión
@@ -293,16 +290,7 @@
           </div>
         </div>
 
-        <!-- Vista POS (Punto de venta) -->
-        <div id="view-pos" class="view">
-          <div class="pos-header">
-            <h3>Punto de venta</h3>
-            <p class="subtitle">
-              Registra ventas usando las variantes de producto (talla, color, stock y precio).
-            </p>
-          </div>
-
-                  <!-- Vista de creación de usuarios internos -->
+        <!-- Vista de creación de usuarios internos -->
         <div id="view-usuarios" class="view">
           <div class="pos-header">
             <h3>Gestión de usuarios internos</h3>
@@ -355,6 +343,14 @@
           </form>
         </div>
 
+        <!-- Vista POS (Punto de venta) -->
+        <div id="view-pos" class="view">
+          <div class="pos-header">
+            <h3>Punto de venta</h3>
+            <p class="subtitle">
+              Registra ventas usando las variantes de producto (talla, color, stock y precio).
+            </p>
+          </div>
 
           <div class="pos-columns">
             <!-- Columna izquierda: selección de ítems -->
@@ -542,7 +538,7 @@
   </main>
 
   <footer class="main-footer">
-    <p>Sistema de Ventas para Tienda de Ropa &copy; 2025</p>
+    <p>Sistema de Ventas Moda Boutique &copy; 2025</p>
   </footer>
 
   <script src="js/app.js"></script>
