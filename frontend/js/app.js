@@ -1157,8 +1157,13 @@ async function crearUsuarioInterno(nombreUsuario, password, rol) {
 }
 
 if (userForm) {
+  console.log("✅ userForm encontrado, agregando listener de submit");
+
   userForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    console.log("🚀 Submit de user-form disparado");
+    alert("Submit de Crear usuario disparado"); // Solo para probar
 
     userFormMessage.textContent = "";
     userFormMessage.classList.remove("error", "success");
@@ -1166,6 +1171,8 @@ if (userForm) {
     const nombreUsuario = document.getElementById("user-name").value.trim();
     const password = document.getElementById("user-password").value.trim();
     const rol = document.getElementById("user-role").value.trim();
+
+    console.log("Datos capturados:", { nombreUsuario, password, rol });
 
     if (!nombreUsuario || !password || !rol) {
       userFormMessage.textContent = "Completa todos los campos obligatorios.";
@@ -1175,18 +1182,21 @@ if (userForm) {
 
     try {
       const data = await crearUsuarioInterno(nombreUsuario, password, rol);
-      console.log("Usuario creado:", data);
+      console.log("✅ Usuario creado:", data);
 
       userFormMessage.textContent = "Usuario creado correctamente.";
       userFormMessage.classList.add("success");
       userForm.reset();
     } catch (error) {
-      console.error("Error creando usuario interno:", error);
+      console.error("❌ Error creando usuario interno:", error);
       userFormMessage.textContent = error.message;
       userFormMessage.classList.add("error");
     }
   });
+} else {
+  console.log("⚠️ userForm NO encontrado en el DOM");
 }
+
 
 
 // --- Iniciar al cargar la página ---
