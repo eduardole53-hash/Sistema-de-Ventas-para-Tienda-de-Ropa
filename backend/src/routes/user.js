@@ -4,11 +4,11 @@ const router = express.Router();
 const userController = require("../controllers/users.controller");
 const { auth, adminOnly } = require("../middleware/auth");
 
-// Solo un ADMIN logueado puede crear nuevos usuarios internos
-router.post("/register", auth, adminOnly, userController.registrarUsuario);
-
-// Login de usuarios internos (admin, vendedor, etc.)
+// Login de usuarios internos
 router.post("/login", userController.loginUsuario);
+
+// Crear usuarios internos (solo Admin autenticado)
+router.post("/register", auth, adminOnly, userController.registrarUsuario);
 
 module.exports = router;
 
