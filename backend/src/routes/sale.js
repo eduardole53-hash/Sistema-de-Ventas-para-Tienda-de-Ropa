@@ -1,7 +1,7 @@
 // src/routes/sale.js
 const express = require("express");
 const router = express.Router();
-const saleController = require("../controllers/sale.controller");
+const saleController = require("../controllers/sales.controller");
 const { auth, adminOnly } = require("../middleware/auth");
 
 // Registrar venta (ya lo usas desde el POS)
