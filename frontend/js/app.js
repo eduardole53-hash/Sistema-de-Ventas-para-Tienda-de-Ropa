@@ -1170,7 +1170,10 @@ if (userForm) {
 
     const nombreUsuario = document.getElementById("user-name").value.trim();
     const password = document.getElementById("user-password").value.trim();
-    const rol = document.getElementById("user-role-select").value.trim();
+
+    const rolSelect = document.getElementById("user-role-select");
+    const rol = rolSelect ? (rolSelect.value || "").trim() : "";
+
 
     console.log("Datos capturados:", { nombreUsuario, password, rol });
 
