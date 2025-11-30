@@ -1125,14 +1125,6 @@ if (posConfirmBtn) {
 
 // === CREACIÓN DE USUARIOS INTERNOS (solo Admin) ===
 
-// Referencias seguras a los campos del formulario
-const userForm = document.getElementById("user-form");
-const userFormMessage = document.getElementById("user-form-message");
-
-const userNameInput = document.getElementById("user-name");
-const userPasswordInput = document.getElementById("user-password");
-const userRoleSelect = document.getElementById("user-role-select");
-
 async function crearUsuarioInterno(nombreUsuario, password, rol) {
   const session = loadSession();
   if (!session || !session.token) {
@@ -1175,14 +1167,24 @@ if (userForm) {
     userFormMessage.textContent = "";
     userFormMessage.classList.remove("error", "success");
 
-    // Leer valores de forma segura
-    const nombreUsuario = userNameInput
-      ? (userNameInput.value || "").trim()
-      : "";
-    const password = userPasswordInput
-      ? (userPasswordInput.value || "").trim()
-      : "";
-    const rol = userRoleSelect ? (userRoleSelect.value || "").trim() : "";
+    // Tomar los elementos de forma segura
+    const nameEl = document.getElementById("user-name");
+    const passEl = document.getElementById("user-password");
+    const roleEl = document.getElementById("user-role-select");
+
+    // Si alguno es null, se convierte en cadena vacía y NO revienta
+    const nombreUsuario =
+      nameEl && typeof nameEl.value === "string"
+        ? nameEl.value.trim()
+        : "";
+    const password =
+      passEl && typeof passEl.value === "string"
+        ? passEl.value.trim()
+        : "";
+    const rol =
+      roleEl && typeof roleEl.value === "string"
+        ? roleEl.value.trim()
+        : "";
 
     console.log("Datos capturados:", { nombreUsuario, password, rol });
 
@@ -1208,12 +1210,3 @@ if (userForm) {
 } else {
   console.log("⚠️ userForm NO encontrado en el DOM");
 }
-
-// --- Iniciar al cargar la página ---
-document.addEventListener("DOMContentLoaded", initFromSession);
-
-
-
-
-// --- Iniciar al cargar la página ---
-document.addEventListener("DOMContentLoaded", initFromSession);
