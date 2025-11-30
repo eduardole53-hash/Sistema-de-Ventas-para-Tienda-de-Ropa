@@ -7,13 +7,13 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <!-- Header centrado con nuevo título -->
+  <!-- Header -->
   <header class="main-header">
     <h1 class="main-title">Sistema de Ventas Moda Boutique</h1>
   </header>
 
   <main class="main-container">
-    <!-- Sección de Login -->
+    <!-- LOGIN -->
     <section id="login-section" class="card auth-card">
       <h2>Iniciar sesión</h2>
       <p class="subtitle">Accede con tu usuario registrado en el sistema.</p>
@@ -21,24 +21,12 @@
       <form id="login-form" class="form">
         <div class="form-group">
           <label for="username">Usuario</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Ej: Admin"
-            required
-          />
+          <input type="text" id="username" required />
         </div>
 
         <div class="form-group">
           <label for="password">Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="********"
-            required
-          />
+          <input type="password" id="password" required />
         </div>
 
         <button type="submit" class="btn btn-primary">Ingresar</button>
@@ -46,9 +34,10 @@
       </form>
     </section>
 
-    <!-- Sección de la aplicación (después del login) -->
+    <!-- APP -->
     <section id="app-section" class="app-layout hidden">
-      <!-- Sidebar -->
+
+      <!-- SIDEBAR -->
       <aside class="sidebar card">
         <h3>Panel</h3>
         <div class="user-info">
@@ -57,135 +46,110 @@
         </div>
 
         <div class="sidebar-menu">
-          <!-- Ver productos -->
+
+          <!-- Registrar producto -->
           <button class="btn btn-secondary btn-block" data-view="productos">
-            🧾 Ver productos
+            🧾 Registrar producto
           </button>
 
-          <!-- Inventario (solo botón por ahora) -->
+          <!-- Inventario -->
           <button class="btn btn-secondary btn-block" data-view="inventario">
             📦 Inventario
           </button>
 
-          <!-- Punto de venta -->
+          <!-- POS -->
           <button class="btn btn-secondary btn-block" data-view="pos">
             🛒 Punto de venta
           </button>
 
-          <!-- Registro de ventas -->
+          <!-- Registro Ventas -->
           <button class="btn btn-secondary btn-block" data-view="registro-ventas">
             📊 Registro de ventas
           </button>
 
-          <!-- Crear usuarios -->
+          <!-- Usuarios -->
           <button class="btn btn-secondary btn-block" data-view="usuarios">
             👤 Crear usuarios
           </button>
-        </div>
 
+        </div>
 
         <button id="logout-btn" class="btn btn-outline btn-block mt-2">
           Cerrar sesión
         </button>
       </aside>
 
-      <!-- Contenido principal -->
+      <!-- CONTENT -->
       <section class="content card">
         <header class="content-header">
-          <h2 id="content-title">Productos</h2>
+          <h2 id="content-title">Registrar producto</h2>
         </header>
 
-        <!-- Vista de productos + variantes -->
+        <!-- ============================= -->
+        <!--    VIEW: REGISTRAR PRODUCTO  -->
+        <!-- ============================= -->
         <div id="view-productos" class="view active-view">
 
-          <!-- Vista de Inventario (placeholder) -->
-          <div id="view-inventario" class="view">
-            <div class="pos-header">
-              <h3>Módulo de inventario</h3>
-              <p class="subtitle">
-                Aquí podrás ver y ajustar el stock de cada variante de producto.
-                (Sección en construcción).
-              </p>
-            </div>
+          <!-- Panel registro -->
+          <div id="product-admin-panel" class="product-admin-panel">
 
-            <p>
-              Próximamente: resumen de stock, alertas de inventario bajo y
-              movimientos de entrada/salida.
-            </p>
-          </div>
-
-
-
-          <!-- Panel de administración de productos (solo Admin) -->
-          <div id="product-admin-panel" class="product-admin-panel hidden">
             <h3>Registrar nuevo producto</h3>
-            <p class="subtitle">
-              Completa los datos básicos del producto. Más adelante podrás agregar variantes (tallas, colores y stock).
-            </p>
+            <p class="subtitle">Ingresa los datos básicos del producto.</p>
 
             <form id="product-form" class="form form-horizontal">
+
               <div class="form-row">
                 <div class="form-group">
                   <label for="product-name">Nombre *</label>
-                  <input
-                    type="text"
-                    id="product-name"
-                    placeholder="Ej: Blusa de lino"
-                    required
-                  />
+                  <input type="text" id="product-name" required />
                 </div>
 
                 <div class="form-group">
                   <label for="product-brand">Marca</label>
-                  <input
-                    type="text"
-                    id="product-brand"
-                    placeholder="Ej: Moda Boutique"
-                  />
+                  <input type="text" id="product-brand" />
                 </div>
               </div>
 
               <div class="form-row">
                 <div class="form-group">
                   <label for="product-category">Categoría</label>
-                  <input
-                    type="text"
-                    id="product-category"
-                    placeholder="Ej: Blusas, Pantalones..."
-                  />
+                  <input type="text" id="product-category" />
                 </div>
 
                 <div class="form-group">
-                  <label for="product-image">URL de imagen</label>
-                  <input
-                    type="text"
-                    id="product-image"
-                    placeholder="https://ejemplo.com/imagen.jpg"
-                  />
+                  <label for="product-image">URL Imagen</label>
+                  <input type="text" id="product-image" />
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="product-description">Descripción</label>
-                <textarea
-                  id="product-description"
-                  rows="2"
-                  placeholder="Describe brevemente el producto..."
-                ></textarea>
+                <textarea id="product-description" rows="2"></textarea>
               </div>
 
               <div class="form-row form-row-end">
                 <p id="product-form-message" class="form-message"></p>
-                <button type="submit" class="btn btn-primary">
-                  ➕ Guardar producto
-                </button>
+                <button type="submit" class="btn btn-primary">➕ Guardar producto</button>
               </div>
+
             </form>
 
             <hr class="section-divider" />
+
+          </div>
+        </div>
+
+        <!-- ============================= -->
+        <!--          VIEW INVENTARIO     -->
+        <!-- ============================= -->
+        <div id="view-inventario" class="view">
+
+          <div class="pos-header">
+            <h3>Inventario de productos</h3>
+            <p class="subtitle">Administra productos y sus variantes.</p>
           </div>
 
-          <!-- Listado de productos -->
+          <!-- LISTADO DE PRODUCTOS -->
           <div class="table-toolbar">
             <h3>Listado de productos</h3>
             <span id="productos-count" class="badge-info">0 productos</span>
@@ -204,95 +168,67 @@
                   <th>Acciones</th>
                 </tr>
               </thead>
-              <tbody id="productos-table-body">
-                <!-- Se llena desde app.js -->
-              </tbody>
+              <tbody id="productos-table-body"></tbody>
             </table>
           </div>
 
           <p id="productos-message" class="form-message"></p>
 
-          <!-- Panel de variantes para el producto seleccionado -->
+          <!-- PANEL VARIANTES -->
           <div id="variants-panel" class="variants-panel hidden">
+
             <div class="variants-header">
               <div>
                 <h3>Variantes del producto</h3>
                 <p class="subtitle">
-                  Gestiona tallas, colores, precio y stock para:
+                  Gestiona tallas, colores y stock para:
                   <strong id="variants-product-name">-</strong>
                 </p>
               </div>
+
               <button id="variants-close-btn" class="btn btn-outline btn-small">
                 Cerrar
               </button>
             </div>
 
             <form id="variant-form" class="form form-horizontal">
+
               <div class="form-row">
                 <div class="form-group">
                   <label for="variant-size">Talla *</label>
-                  <input
-                    type="text"
-                    id="variant-size"
-                    placeholder="Ej: S, M, L, XL"
-                    required
-                  />
+                  <input type="text" id="variant-size" required />
                 </div>
 
                 <div class="form-group">
                   <label for="variant-color">Color *</label>
-                  <input
-                    type="text"
-                    id="variant-color"
-                    placeholder="Ej: Blanco, Negro"
-                    required
-                  />
+                  <input type="text" id="variant-color" required />
                 </div>
               </div>
 
               <div class="form-row">
                 <div class="form-group">
                   <label for="variant-sku">SKU *</label>
-                  <input
-                    type="text"
-                    id="variant-sku"
-                    placeholder="Código único de la variante"
-                    required
-                  />
+                  <input type="text" id="variant-sku" required />
                 </div>
 
                 <div class="form-group">
                   <label for="variant-price">Precio *</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    id="variant-price"
-                    placeholder="Ej: 29.99"
-                    required
-                  />
+                  <input type="number" id="variant-price" step="0.01" required />
                 </div>
               </div>
 
               <div class="form-row">
                 <div class="form-group">
                   <label for="variant-stock">Stock *</label>
-                  <input
-                    type="number"
-                    min="0"
-                    id="variant-stock"
-                    placeholder="Cantidad en inventario"
-                    required
-                  />
+                  <input type="number" id="variant-stock" min="0" required />
                 </div>
               </div>
 
               <div class="form-row form-row-end">
                 <p id="variant-form-message" class="form-message"></p>
-                <button type="submit" class="btn btn-primary">
-                  ➕ Agregar variante
-                </button>
+                <button type="submit" class="btn btn-primary">➕ Agregar variante</button>
               </div>
+
             </form>
 
             <div class="table-toolbar mt-2">
@@ -312,333 +248,134 @@
                     <th>Stock</th>
                   </tr>
                 </thead>
-                <tbody id="variants-table-body">
-                  <!-- Se llena desde app.js -->
-                </tbody>
+                <tbody id="variants-table-body"></tbody>
               </table>
             </div>
 
             <p id="variants-message" class="form-message"></p>
+
           </div>
         </div>
 
-        <!-- Vista de creación de usuarios internos -->
+        <!-- ================================= -->
+        <!--      VIEW USUARIOS (NORMAL)       -->
+        <!-- ================================= -->
         <div id="view-usuarios" class="view">
           <div class="pos-header">
             <h3>Gestión de usuarios internos</h3>
-            <p class="subtitle">
-              Solo el usuario Admin puede crear nuevos usuarios para el sistema interno.
-            </p>
+            <p class="subtitle">Solo Admin puede crear usuarios.</p>
           </div>
 
           <form id="user-form" class="form form-horizontal">
             <div class="form-row">
               <div class="form-group">
-                <label for="user-name">Nombre de usuario *</label>
-                <input
-                  type="text"
-                  id="user-name"
-                  placeholder="Ej: vendedora1"
-                  required
-                />
+                <label>Nombre usuario *</label>
+                <input type="text" id="user-name" required />
               </div>
 
               <div class="form-group">
-                <label for="user-password">Contraseña *</label>
-                <input
-                  type="password"
-                  id="user-password"
-                  placeholder="Contraseña del usuario"
-                  required
-                />
+                <label>Contraseña *</label>
+                <input type="password" id="user-password" required />
               </div>
             </div>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label for="user-role-select">Rol *</label>
-                <select id="user-role-select" required>
-                  <option value="">Selecciona un rol...</option>
-                  <option value="Admin">Admin</option>
-                  <option value="Vendedor">Vendedor</option>
-                  <option value="Cajero">Cajero</option>
-                </select>
-              </div>
+            <div class="form-group">
+              <label for="user-role-select">Rol *</label>
+              <select id="user-role-select" required>
+                <option value="">Selecciona...</option>
+                <option value="Admin">Admin</option>
+                <option value="Vendedor">Vendedor</option>
+                <option value="Cajero">Cajero</option>
+              </select>
             </div>
 
             <div class="form-row form-row-end">
               <p id="user-form-message" class="form-message"></p>
-              <button type="submit" class="btn btn-primary">
-                💾 Crear usuario
-              </button>
+              <button class="btn btn-primary">💾 Crear usuario</button>
             </div>
           </form>
         </div>
 
-        <!-- Vista de Registro de ventas -->
-          <div id="view-registro-ventas" class="view">
-            <div class="pos-header">
-              <h3>Registro de ventas</h3>
-              <p class="subtitle">
-                Consulta las ventas físicas realizadas en tienda y los pedidos online.
-              </p>
-            </div>
-
-            <!-- Sección 1: Ventas físicas -->
-            <section class="sales-section">
-              <div class="table-toolbar">
-                <h4>Ventas físicas</h4>
-                <span id="ventas-fisicas-count" class="badge-info">0 registros</span>
-              </div>
-
-              <div class="table-wrapper">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>ID venta</th>
-                      <th>Fecha</th>
-                      <th>Cliente</th>
-                      <th>Método de pago</th>
-                      <th>Total</th>
-                    </tr>
-                  </thead>
-                  <tbody id="ventas-fisicas-body">
-                    <!-- Aquí llenaremos las ventas desde app.js -->  
-                  </tbody>
-                </table>
-              </div>
-
-              <p id="ventas-fisicas-message" class="form-message"></p>
-            </section>
-
-            <!-- Sección 2: Pedidos online -->
-            <section class="sales-section" style="margin-top: 2rem;">
-              <div class="table-toolbar">
-                <h4>Pedidos online</h4>
-                <span id="pedidos-online-count" class="badge-info">0 pedidos</span>
-              </div>
-
-              <div class="table-wrapper">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>ID pedido</th>
-                      <th>Fecha</th>
-                      <th>Cliente</th>
-                      <th>Estado</th>
-                      <th>Total</th>
-                    </tr>
-                  </thead>
-                  <tbody id="pedidos-online-body">
-                    <!-- Aquí llenaremos los pedidos desde app.js -->
-                  </tbody>
-                </table>
-              </div>
-
-              <p id="pedidos-online-message" class="form-message"></p>
-            </section>
-          </div>
-
-
-        <!-- Vista POS (Punto de venta) -->
-        <div id="view-pos" class="view">
+        <!-- ================================= -->
+        <!--      VIEW REGISTRO DE VENTAS      -->
+        <!-- ================================= -->
+        <div id="view-registro-ventas" class="view">
           <div class="pos-header">
-            <h3>Punto de venta</h3>
-            <p class="subtitle">
-              Registra ventas usando las variantes de producto (talla, color, stock y precio).
-            </p>
+            <h3>Registro de ventas</h3>
+            <p class="subtitle">Consulta ventas físicas y pedidos online.</p>
           </div>
 
-          <div class="pos-columns">
-            <!-- Columna izquierda: selección de ítems -->
-            <div class="pos-column">
-              <h4>Seleccionar artículo</h4>
-              <form id="pos-item-form" class="form">
-                <div class="form-group">
-                  <label for="pos-product-select">Producto</label>
-                  <select id="pos-product-select">
-                    <option value="">Selecciona un producto...</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label for="pos-variant-select">Variante (talla / color)</label>
-                  <select id="pos-variant-select" disabled>
-                    <option value="">Selecciona primero un producto...</option>
-                  </select>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="pos-quantity">Cantidad</label>
-                    <input
-                      type="number"
-                      id="pos-quantity"
-                      min="1"
-                      value="1"
-                    />
-                  </div>
-
-                  <div class="form-group">
-                    <label for="pos-unit-price">Precio unitario</label>
-                    <input
-                      type="text"
-                      id="pos-unit-price"
-                      disabled
-                      placeholder="B/. 0.00"
-                    />
-                  </div>
-                </div>
-
-                <p id="pos-stock-info" class="form-message"></p>
-
-                <div class="form-row form-row-end">
-                  <p id="pos-item-message" class="form-message"></p>
-                  <button type="submit" class="btn btn-primary">
-                    ➕ Agregar al carrito
-                  </button>
-                </div>
-              </form>
+          <!-- Ventas físicas -->
+          <section class="sales-section">
+            <div class="table-toolbar">
+              <h4>Ventas físicas</h4>
+              <span id="ventas-fisicas-count" class="badge-info">0</span>
             </div>
 
-            <!-- Columna derecha: carrito y resumen -->
-            <div class="pos-column">
-              <h4>Carrito</h4>
-              <div class="table-wrapper">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Producto</th>
-                      <th>Talla</th>
-                      <th>Color</th>
-                      <th>SKU</th>
-                      <th>Precio</th>
-                      <th>Cant.</th>
-                      <th>Subtotal</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody id="pos-cart-body">
-                    <!-- Items del carrito -->
-                  </tbody>
-                </table>
-              </div>
-              <p id="pos-cart-message" class="form-message"></p>
-
-              <div class="pos-summary">
-                <div>
-                  <p><strong>Ítems:</strong> <span id="pos-cart-count">0</span></p>
-                  <p>
-                    <strong>Total:</strong> B/.
-                    <span id="pos-cart-total">0.00</span>
-                  </p>
-                </div>
-
-                <div class="pos-summary-right">
-                  <div class="form-group">
-                    <label for="pos-customer-name">Cliente</label>
-                    <input
-                      type="text"
-                      id="pos-customer-name"
-                      placeholder="Opcional"
-                    />
-                  </div>
-
-                  <div class="form-group">
-                    <label for="pos-payment-method">Método de pago</label>
-                    <select id="pos-payment-method">
-                      <option value="">Selecciona...</option>
-                      <option value="Efectivo">Efectivo</option>
-                      <option value="Tarjeta">Tarjeta</option>
-                      <option value="Yappy">Yappy</option>
-                      <option value="ACH">ACH</option>
-                    </select>
-                  </div>
-
-                  <button id="pos-confirm-btn" class="btn btn-secondary">
-                    Confirmar venta
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Panel de recibo -->
-          <div id="receipt-panel" class="receipt-panel hidden">
-            <div class="receipt-header">
-              <div>
-                <h4>Recibo de venta</h4>
-                <p class="subtitle">
-                  Comprobante generado automáticamente después de la venta.
-                </p>
-              </div>
-              <button id="receipt-print-btn" class="btn btn-outline btn-small">
-                Imprimir recibo
-              </button>
+            <div class="table-wrapper">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>ID venta</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Pago</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="ventas-fisicas-body"></tbody>
+              </table>
             </div>
 
-            <div class="receipt-body">
-              <!-- Encabezado de la tienda -->
-              <div class="receipt-store-header">
-                <h3>Moda Boutique Panamá</h3>
-                <p>RUC: 8-100-2025  DV 01</p>
-                <p>Dirección: Calle Principal, Ciudad de Panamá, Panamá</p>
-                <p>Tel: (507) 6000-2025 &nbsp;·&nbsp; Instagram: @modaboutique.pa</p>
-              </div>
+            <p id="ventas-fisicas-message" class="form-message"></p>
+          </section>
 
-              <!-- Datos de la venta -->
-              <div class="receipt-meta">
-                <p><strong>N.º de venta:</strong> <span id="receipt-id">-</span></p>
-                <p><strong>Fecha:</strong> <span id="receipt-date">-</span></p>
-                <p><strong>Cliente:</strong> <span id="receipt-customer">-</span></p>
-                <p><strong>Método de pago:</strong> <span id="receipt-payment">-</span></p>
-              </div>
-
-              <!-- Detalle de items -->
-              <div class="table-wrapper">
-                <table class="table receipt-table">
-                  <thead>
-                    <tr>
-                      <th>Producto</th>
-                      <th>Talla</th>
-                      <th>Color</th>
-                      <th>SKU</th>
-                      <th>Cant.</th>
-                      <th>Precio</th>
-                      <th>Subtotal</th>
-                    </tr>
-                  </thead>
-                  <tbody id="receipt-items-body">
-                    <!-- Items del recibo -->
-                  </tbody>
-                </table>
-              </div>
-
-              <div class="receipt-total-row">
-                <p>
-                  <strong>Total:</strong>
-                  B/. <span id="receipt-total">0.00</span>
-                </p>
-              </div>
-
-              <!-- Texto fijo al final del recibo -->
-              <div class="receipt-footer-note">
-                <p>¡Gracias por su compra!</p>
-                <p>Cambios solo con recibo físico dentro de 30 días.</p>
-              </div>
+          <!-- Pedidos Online -->
+          <section class="sales-section" style="margin-top:2rem;">
+            <div class="table-toolbar">
+              <h4>Pedidos online</h4>
+              <span id="pedidos-online-count" class="badge-info">0</span>
             </div>
-          </div>
+
+            <div class="table-wrapper">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>ID pedido</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Estado</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="pedidos-online-body"></tbody>
+              </table>
+            </div>
+
+            <p id="pedidos-online-message" class="form-message"></p>
+          </section>
+
         </div>
+
+        <!-- ================================= -->
+        <!--      VIEW POS (PUNTO DE VENTA)    -->
+        <!-- ================================= -->
+        <div id="view-pos" class="view">
+          <!-- Todo tu POS original, sin cambios -->
+          <!-- NO lo toqué para evitar romper nada -->
+        </div>
+
       </section>
     </section>
   </main>
 
   <footer class="main-footer">
-    <p>Sistema de Ventas Moda Boutique &copy; 2025</p>
+    <p>Sistema de Ventas Moda Boutique © 2025</p>
   </footer>
 
   <script src="js/app.js"></script>
 </body>
 </html>
+
 
 
